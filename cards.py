@@ -30,8 +30,8 @@ df = pd.DataFrame({
   'unit_price': rng.integers(1000, 5000, n),
 })
 other = pd.DataFrame({'id': range(0, n, 2), 'extra': 1})
-import os, tempfile
-os.chdir(tempfile.mkdtemp()); os.makedirs('data')
+import os
+os.makedirs('data', exist_ok=True)     # verify.py 가 임시 폴더로 옮겨 놓고 돌린다
 df.to_csv('data/파일명.csv', index=False)
 '''
 
@@ -116,10 +116,12 @@ out = (df['price'] < lower) | (df['price'] > upper)
 print(out.sum())                      # 이상치 개수
 print(df.loc[~out, 'price'].mean())   # 이상치 제외 평균'''),
 ('이상치 바꾸기 · 표준화', 'clip', False, 'clip 상한 하한 대체 표준화 z-score min-max 정규화',
-'''capped = df['price'].clip(lower, upper)    # 경계값으로 대체
+'''# lower · upper 는 앞 카드(IQR 이상치)에서 구한 값
+capped = df['price'].clip(lower, upper)    # 경계값으로 대체
 
-z = (df['score'] - df['score'].mean()) / df['score'].std()
+z = (df['score'] - df['score'].mean()) / df['score'].std()   # ddof=1
 print((z.abs() > 3).sum())                 # |z| > 3 개수
+# scipy.stats.zscore · StandardScaler 는 ddof=0 — 경계 개수가 달라질 수 있다
 
 lo, hi = df['score'].min(), df['score'].max()
 mm = (df['score'] - lo) / (hi - lo)              # min-max 0~1'''),
@@ -184,7 +186,8 @@ print(summary.round(2))'''),
 print(g.idxmax(), g.max())     # 평균이 가장 큰 그룹과 그 값
 print(g.idxmin())
 
-bal = df.groupby('region')['flag'].sum()
+score = df['status'].map({'방문': 1, '취소': -1, '대기': 0})
+bal = score.groupby(df['region']).sum()    # 음수도 나오는 합
 key = bal.abs().idxmax()       # 절댓값이 가장 큰 그룹
 print(key, bal.loc[key])       # 값은 원래 부호로'''),
 ('pivot_table · crosstab · unstack', 'pivot', False, 'pivot_table crosstab unstack 교차표 피벗 aggfunc',
@@ -196,7 +199,8 @@ wide = df.groupby(['region', 'group'])['amount'].mean().unstack()'''),
 ('병합 · 이어 붙이기', 'merge', False, 'merge join concat how left inner 병합 결합',
 '''m = pd.merge(df, other, on='id', how='left')   # inner/left/right/outer
 both = pd.concat([df, df], axis=0, ignore_index=True)  # 위아래
-side = pd.concat([df, other], axis=1)                  # 좌우'''),
+side = pd.concat([df, other], axis=1)                  # 좌우
+# axis=1 은 키가 아니라 「행 번호」로 붙인다 — id 로 맞추려면 merge'''),
 ('상관계수 · 순위 · 누적', 'corr', False, 'corr 상관계수 rank cumsum shift diff 누적 순위',
 '''df[['age', 'score', 'amount']].corr()
 df['age'].corr(df['score'])                    # 피어슨
@@ -213,7 +217,9 @@ print(int(x))          # 소수점 버림 (0 쪽으로 자름)
 print(round(x))        # 반올림 → 정수
 print(round(x, 2))     # 소수 둘째 자리까지
 # 「정수로(소수점 이하 버림)」      → int(x)
-# 「소수 셋째 자리에서 반올림」     → round(x, 2)'''),
+# 「소수 셋째 자리에서 반올림」     → round(x, 2)
+# round 는 끝이 정확히 .5 면 짝수 쪽으로 간다: round(2.5) → 2, round(3.5) → 4
+# 값이 .5 로 딱 떨어지면 출력값을 눈으로 한 번 더 본다'''),
 ('음수 · 올림 · 내림', 'math', False, 'floor ceil 음수 내림 올림 trunc np.floor math',
 '''import math
 print(int(-2.7))         # -2  (0 쪽으로)
@@ -235,8 +241,7 @@ print(answer)                      # 답안 칸에는 이 숫자만 입력'''),
 ])
 
 T2_SETUP = r'''
-import pandas as pd, numpy as np, os, tempfile
-os.chdir(tempfile.mkdtemp())
+import pandas as pd, numpy as np, os
 os.makedirs('data', exist_ok=True)
 rng = np.random.default_rng(0)
 def mk(n, with_y=True):
@@ -256,19 +261,6 @@ sample = pd.DataFrame({'id': test['id'], 'pred': 0})
 target_col, id_col = 'target', 'id'
 '''
 
-PREP_FN = r'''
-def prepare_features(ref_X, other_X):
-    ref_X, other_X = ref_X.copy(), other_X.copy()
-    cat = ref_X.select_dtypes(include='object').columns
-    num = ref_X.select_dtypes(exclude='object').columns
-    for c in num:
-        m = ref_X[c].median(); ref_X[c] = ref_X[c].fillna(m); other_X[c] = other_X[c].fillna(m)
-    for c in cat:
-        ref_X[c] = ref_X[c].fillna('unknown'); other_X[c] = other_X[c].fillna('unknown')
-    ref_X = pd.get_dummies(ref_X)
-    other_X = pd.get_dummies(other_X).reindex(columns=ref_X.columns, fill_value=0)
-    return ref_X, other_X
-'''
 
 sec('t2prep', '작업형 2 · 전처리', 'target·id 분리 → 결측 → 인코딩 → train 기준으로 컬럼 맞추기. 이 순서만 지키면 된다.', T2_SETUP, [
 ('라이브러리 · 데이터 불러오기', 'sklearn', False, 'import train test sample_submission 불러오기',
@@ -350,10 +342,7 @@ test_sc = sc.transform(test_enc)    # test 는 transform 만
 # 트리 모델(RandomForest)은 스케일링 없이도 된다'''),
 ])
 
-sec('t2model', '작업형 2 · 모델 · 검증', '검증으로 점수를 보고, 전체 train 으로 다시 학습해 test 를 예측한다.', T2_SETUP + PREP_FN + r'''
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.metrics import roc_auc_score, f1_score, accuracy_score, mean_absolute_error, mean_squared_error, r2_score
+sec('t2model', '작업형 2 · 모델 · 검증', '검증으로 점수를 보고, 전체 train 으로 다시 학습해 test 를 예측한다.', T2_SETUP + r'''
 X_raw = train.drop(columns=[target_col, id_col]); y = train[target_col]; test_raw = test.drop(columns=[id_col])
 yr = train['num2'] * 1.5 + rng.normal(0, 5, len(train)) + 10
 ''', [
@@ -370,13 +359,15 @@ print(accuracy_score(y_va, pred))'''),
 ('양성 확률 꺼내기', '함정', True, 'predict_proba classes_ 양성 확률 positive_index roc_auc 이진분류',
 '''proba = model.predict_proba(X_va)            # (행, 클래스 수)
 pos = list(model.classes_).index(1)           # 라벨 1 의 열 위치
+# 라벨이 문자열이면 1 대신 문제의 양성 라벨 — 예: .index('Yes')
 p1 = proba[:, pos]
 print(roc_auc_score(y_va, p1))                # ROC-AUC 는 확률로'''),
 ('분류 평가지표', 'metrics', False, 'f1 macro accuracy precision recall roc_auc 평가지표 분류',
 '''from sklearn.metrics import precision_score, recall_score
 
 accuracy_score(y_va, pred)
-f1_score(y_va, pred)                    # 이진
+f1_score(y_va, pred)                    # 이진 (양성 = 1)
+# 라벨이 문자열이면 f1_score(y_va, pred, pos_label='Yes')
 f1_score(y_va, pred, average='macro')   # 다중분류 Macro F1
 precision_score(y_va, pred); recall_score(y_va, pred)
 roc_auc_score(y_va, p1)                 # 확률값 넣기'''),
@@ -394,7 +385,8 @@ r_pred = reg.predict(Xr_va)'''),
 mae = mean_absolute_error(yr_va, r_pred)
 mse = mean_squared_error(yr_va, r_pred)
 rmse = np.sqrt(mse)                                      # RMSE
-rmsle = np.sqrt(mean_squared_log_error(yr_va, r_pred))   # 음수가 있으면 오류
+rmsle = np.sqrt(mean_squared_log_error(yr_va, np.clip(r_pred, 0, None)))
+# RMSLE 는 음수 예측에서 오류 → 0 으로 자른 뒤 계산 (제출값도 같이 자른다)
 r2 = r2_score(yr_va, r_pred)'''),
 ('다른 모델로 바꿔 보기', 'sklearn', False, 'LogisticRegression DecisionTree GradientBoosting LinearRegression 모델 교체',
 '''from sklearn.linear_model import LogisticRegression, LinearRegression
@@ -457,7 +449,6 @@ df['success'] = rng.integers(0, 2, n)
 df['grade'] = rng.choice(['A','B','C','D'], n)
 a = df.loc[df['cat'] == 'p', 'x']; b = df.loc[df['cat'] == 'q', 'x']
 '''
-T3_IMPORTS = "\nfrom scipy import stats\nimport statsmodels.api as sm\nfrom statsmodels.formula.api import ols\n"
 
 sec('t3test', '작업형 3 · t-검정 · 비율 검정', '함수보다 「방향(alternative)」과 「무엇 − 무엇」을 먼저 정한다.', T3_SETUP, [
 ('라이브러리', 'scipy', False, 'scipy stats statsmodels import ols proportions_ztest',
@@ -475,8 +466,8 @@ stats.ttest_1samp(df['x'], 50, alternative='greater')
 # 두 표본이면 「첫 번째 인자 − 두 번째 인자」 기준
 stats.ttest_ind(a, b, alternative='less')     # a 평균 < b 평균'''),
 ('정규성 · 등분산 검정', 'shapiro', False, 'shapiro 정규성 levene 등분산 bartlett 검정',
-'''print(stats.shapiro(a).pvalue)          # p ≥ 0.05 → 정규성 만족
-print(stats.levene(a, b).pvalue)        # p ≥ 0.05 → 등분산
+'''print(stats.shapiro(a).pvalue)          # p ≥ 0.05 → 정규성 기각 못 함
+print(stats.levene(a, b).pvalue)        # p ≥ 0.05 → 등분산 기각 못 함
 print(stats.bartlett(a, b).pvalue)'''),
 ('독립표본 t-검정', 'ttest_ind', False, 'ttest_ind 독립표본 equal_var 등분산 welch 두 집단',
 '''lev_p = stats.levene(a, b).pvalue
@@ -484,15 +475,17 @@ r = stats.ttest_ind(a, b, equal_var=(lev_p >= 0.05))   # 등분산 아니면 Wel
 print(round(r.statistic, 4), round(r.pvalue, 4))
 print(round(a.mean() - b.mean(), 4))     # 평균 차이 방향 확인'''),
 ('대응표본 t-검정', 'ttest_rel', False, 'ttest_rel 대응표본 전후 before after 차이',
-'''# 「사후 − 사전」 순서로 넣는다
+'''# 문제가 정한 「A − B」 순서대로 넣는다 (여기선 사후 − 사전)
+# 순서를 바꾸면 t 부호와 단측 p-value 가 뒤집힌다
 r = stats.ttest_rel(df['after'], df['before'], alternative='greater')
 print(round(r.statistic, 4), round(r.pvalue, 4))
 print(round((df['after'] - df['before']).mean(), 4))'''),
 ('신뢰구간', 'confidence_interval', False, '신뢰구간 confidence_interval t.interval 95%',
 '''r = stats.ttest_1samp(df['x'], 50)
-ci = r.confidence_interval(confidence_level=0.95)
+ci = r.confidence_interval(confidence_level=0.95)   # scipy 1.10 이상
 print(round(ci.low, 4), round(ci.high, 4))
 
+# 버전이 낮아 위가 오류면 — 버전과 상관없이 되는 방법
 se = stats.sem(df['x'])
 stats.t.interval(0.95, len(df) - 1, loc=df['x'].mean(), scale=se)'''),
 ('검정통계량 직접 계산', 't', False, '검정통계량 직접 계산 표준오차 공식 t값',
@@ -503,13 +496,15 @@ print(round(t, 4), round(p, 4))'''),
 ('비율 검정 (1표본 · 2표본)', 'proportions_ztest', False, '비율 검정 proportions_ztest 성공 수 nobs value z검정',
 '''cnt, nobs = df['success'].sum(), len(df)
 z, p = proportions_ztest(count=cnt, nobs=nobs, value=0.5)     # 1표본
+# 기본은 표준오차를 「표본 비율」로 계산한다 (교재 풀이와 같음)
+# 귀무 비율로 계산하라는 문제면 prop_var=0.5 를 더한다
 
 s = df.groupby('cat')['success'].agg(['sum', 'count'])
 z2, p2 = proportions_ztest(count=s['sum'].values,
                            nobs=s['count'].values)             # 2표본'''),
 ])
 
-sec('t3anova', '작업형 3 · 분산분석 · 카이제곱', '세 집단 이상의 평균은 ANOVA, 범주끼리의 관계는 카이제곱.', T3_SETUP + T3_IMPORTS, [
+sec('t3anova', '작업형 3 · 분산분석 · 카이제곱', '세 집단 이상의 평균은 ANOVA, 범주끼리의 관계는 카이제곱.', T3_SETUP, [
 ('일원분산분석 (scipy)', 'f_oneway', False, 'f_oneway 일원분산분석 ANOVA 세 집단 F',
 '''groups = [g['x'].values for _, g in df.groupby('group')]
 r = stats.f_oneway(*groups)
@@ -520,7 +515,8 @@ print(sm.stats.anova_lm(model, typ=2))
 
 # 이원분산분석 (교호작용 포함)
 m2 = ols('x ~ C(group) * C(cat)', data=df).fit()
-print(sm.stats.anova_lm(m2, typ=2))'''),
+print(sm.stats.anova_lm(m2, typ=2))
+# anova_lm 기본은 typ=1 — 집단 크기가 다른 이원분산분석은 typ 에 따라 F 가 달라진다'''),
 ('사후검정 (Tukey)', 'tukeyhsd', False, 'tukey pairwise_tukeyhsd 사후검정 다중비교',
 '''from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
@@ -545,12 +541,12 @@ print('기각' if p < alpha else '채택')
 # p ≥ α → 귀무가설 채택 (기각하지 못한다)'''),
 ])
 
-sec('t3reg', '작업형 3 · 상관 · 회귀', 'statsmodels 결과에서 필요한 값 하나만 꺼내는 게 실력이다. summary 전체를 외울 필요는 없다.', T3_SETUP + T3_IMPORTS, [
+sec('t3reg', '작업형 3 · 상관 · 회귀', 'statsmodels 결과에서 필요한 값 하나만 꺼내는 게 실력이다. summary 전체를 외울 필요는 없다.', T3_SETUP, [
 ('상관분석', 'pearsonr', False, 'pearsonr spearmanr 상관분석 상관계수 p-value',
-'''r = stats.pearsonr(df['x'], df['y'])
-print(round(r.statistic, 4), round(r.pvalue, 4))
-s = stats.spearmanr(df['x'], df['y'])
-print(round(s.statistic, 4))'''),
+'''r, p = stats.pearsonr(df['x'], df['y'])        # 두 값으로 받으면 버전 무관
+print(round(r, 4), round(p, 4))
+rho, p_s = stats.spearmanr(df['x'], df['y'])
+print(round(rho, 4), round(p_s, 4))'''),
 ('선형회귀 OLS', 'sm.OLS', False, 'OLS add_constant 상수항 회귀분석 선형회귀 statsmodels fit',
 '''X = sm.add_constant(df[['x', 'x2']])     # 상수항 꼭 추가
 model = sm.OLS(df['y'], X).fit()
@@ -589,7 +585,7 @@ X = sm.add_constant(X)
 sm.OLS(df['y'], X).fit().params'''),
 ])
 
-sec('t3logit', '작업형 3 · 로지스틱 회귀', '계수 → exp → 오즈비. 문제에 따로 말이 없으면 「규제 없이」 푼다.', T3_SETUP + T3_IMPORTS, [
+sec('t3logit', '작업형 3 · 로지스틱 회귀', '계수 → exp → 오즈비. 문제에 따로 말이 없으면 「규제 없이」 푼다.', T3_SETUP, [
 ('로지스틱 회귀 (statsmodels)', 'sm.Logit', False, 'Logit 로지스틱 회귀 disp add_constant statsmodels',
 '''X = sm.add_constant(df[['x', 'x2']])
 logit = sm.Logit(df['label'], X).fit(disp=False)  # 반복 로그 숨김
@@ -610,13 +606,15 @@ print(round(logit.llf, 4), round(logit.aic, 4))   # 로그우도 · AIC'''),
 ('sklearn 으로 같은 값 내기', '함정', True, 'LogisticRegression penalty None 규제 sklearn 계수 같은 값',
 '''from sklearn.linear_model import LogisticRegression
 
-lr = LogisticRegression(penalty=None, max_iter=1000)   # 규제 없이
+lr = LogisticRegression(penalty=None, solver='newton-cholesky',
+                        tol=1e-8, max_iter=1000)   # 규제 없이 · 끝까지 수렴 (1.2 이상)
 lr.fit(df[['x', 'x2']], df['label'])
-print(lr.intercept_, lr.coef_)   # statsmodels Logit 과 같은 값
-# 기본값(penalty='l2') 그대로면 계수가 달라진다'''),
+print(lr.intercept_, lr.coef_)   # statsmodels Logit 과 넷째 자리까지 같다
+# solver·tol 을 빼면 버전에 따라 넷째 자리가 달라진다 — 최종 답은 statsmodels 로
+# 기본값(penalty='l2') 그대로면 계수가 아예 달라진다'''),
 ])
 
-sec('env', '시험장에서', '인터넷이 안 된다. 함수가 기억나지 않으면 dir 과 help 로 찾는다.', T3_SETUP + T3_IMPORTS + "\nimport sklearn\n", [
+sec('env', '시험장에서', '인터넷이 안 된다. 함수가 기억나지 않으면 dir 과 help 로 찾는다.', T3_SETUP, [
 ('함수 이름 · 인자 찾기', 'help', False, 'help dir 도움말 함수 찾기 인자 시험장',
 '''import sklearn.metrics
 print([m for m in dir(sklearn.metrics) if 'score' in m])

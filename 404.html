@@ -5,30 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>없는 쪽입니다 — 빅데이터분석기사 실기 스니펫</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon.png" sizes="96x96" type="image/png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#fbf8f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#101513" media="(prefers-color-scheme: dark)">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="icon" href="/bigdata-practical-snippets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/bigdata-practical-snippets/favicon.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="/bigdata-practical-snippets/apple-touch-icon.png">
+<meta name="theme-color" content="#2b2f9c" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#23267f" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
 <style>
-:root{--paper:#fbf8f1;--sheet:#fff;--ink:#1b211e;--ink-2:#4a524d;--muted:#687069;--rule:#e6e1d4;--green:#146c50;--on-green:#fff;color-scheme:light dark}
-@media (prefers-color-scheme:dark){:root{--paper:#101513;--sheet:#161c19;--ink:#e6ece9;--ink-2:#b3c0ba;--muted:#8e9c96;--rule:#27302c;--green:#6ecfa8;--on-green:#0c1714}}
+:root{--paper:#ffffff;--sheet:#ffffff;--ink:#141817;--ink-2:#464d4a;--muted:#6b726f;--rule:#e4e7e6;--accent:#2b2f9c;--on-accent:#fff;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--paper:#0f1211;--sheet:#0f1211;--ink:#e7ebe9;--ink-2:#b2bab6;--muted:#8a928e;--rule:#252b29;--accent:#a7acff;--on-accent:#0f1211}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--paper);color:var(--ink);
-  font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-family:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;padding:20px;word-break:keep-all}
 main{max-width:480px;width:100%}
-.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--green);margin:0 0 10px}
-h1{margin:0;font-size:clamp(24px,5vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.2}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--accent);margin:0 0 10px}
+h1{margin:0;font-size:clamp(24px,5vw,32px);font-weight:600;letter-spacing:-.03em;line-height:1.2}
 p{margin:14px 0 0;color:var(--ink-2);font-size:15px}
 .go{margin:28px 0 0;padding:16px 0 0;border-top:1px solid var(--rule)}
-.go h2{margin:0 0 10px;font-size:13px;font-weight:700;color:var(--muted)}
+.go h2{margin:0 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
 ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
-a.chip{display:inline-block;font-size:13px;font-weight:600;text-decoration:none;padding:7px 11px;border:1px solid var(--rule);border-radius:8px;background:var(--sheet);color:var(--ink-2)}
-a.chip:hover{border-color:var(--green);color:var(--green)}
-a.home{display:inline-block;margin-top:24px;font-size:15px;font-weight:700;text-decoration:none;background:var(--green);color:var(--on-green);padding:10px 16px;border-radius:8px}
-a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+a.chip{display:inline-block;font-size:13.5px;font-weight:500;text-decoration:underline;text-underline-offset:3px;padding:4px 0;margin-right:14px;color:var(--ink-2)}
+a.chip:hover{color:var(--ink)}
+a.home{display:inline-block;margin-top:24px;font-size:15px;font-weight:600;text-decoration:none;background:var(--accent);color:var(--on-accent);padding:10px 16px;border-radius:4px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -39,13 +40,13 @@ a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   <div class="go">
     <h2>바로 가기</h2>
     <ul>
-      <li><a class="chip" href="./?type=t1">작업형 1</a></li>
-      <li><a class="chip" href="./?type=t2">작업형 2</a></li>
-      <li><a class="chip" href="./?type=t3">작업형 3</a></li>
-      <li><a class="chip" href="./?hot=1">감점 포인트 12개</a></li>
+      <li><a class="chip" href="/bigdata-practical-snippets/?type=t1">작업형 1</a></li>
+      <li><a class="chip" href="/bigdata-practical-snippets/?type=t2">작업형 2</a></li>
+      <li><a class="chip" href="/bigdata-practical-snippets/?type=t3">작업형 3</a></li>
+      <li><a class="chip" href="/bigdata-practical-snippets/?hot=1">감점 포인트 12개</a></li>
     </ul>
   </div>
-  <a class="home" href="./">스니펫 전체 보기</a>
+  <a class="home" href="/bigdata-practical-snippets/">스니펫 전체 보기</a>
 </main>
 </body>
 </html>
