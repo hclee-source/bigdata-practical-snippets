@@ -243,7 +243,9 @@ body.memo .snip:not(.shown) .reveal:hover{background:var(--veil-on)}
   .snip.is-hot::before{left:-10px}
   .meta{display:block}
   .acts{margin-top:10px}
-  .code pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12.5px;padding:14px}
+  .code pre{font-size:12.5px;padding:14px}
+  .code.scrolls::after{content:"";position:absolute;top:0;right:0;bottom:0;width:28px;border-radius:0 10px 10px 0;background:linear-gradient(90deg,transparent,var(--code));pointer-events:none}
+  .code.scrolls.at-end::after{display:none}
 }
 @media print{
   :root{
@@ -388,7 +390,11 @@ JS = r'''
   q.value = st.q;
   $$('.seg button').forEach(x => x.setAttribute('aria-pressed', x.dataset.g === st.g));
   $('#share').addEventListener('click', async () => say(await copyText(location.href) ? '지금 화면 그대로의 주소를 복사했다' : '주소를 복사하지 못했다'));
-  paintDone(); apply();
+  // 좁은 화면: 코드는 들여쓰기가 문법이라 줄을 꺾지 않고 옆으로 넘긴다 — 넘길 게 있으면 오른쪽 끝을 흐리게
+  const markScroll = () => $$('.code').forEach(c => { const p = $('pre', c); c.classList.toggle('scrolls', p.scrollWidth > p.clientWidth + 1); c.classList.toggle('at-end', p.scrollLeft + p.clientWidth >= p.scrollWidth - 2); });
+  $$('.code pre').forEach(p => p.addEventListener('scroll', () => p.parentElement.classList.toggle('at-end', p.scrollLeft + p.clientWidth >= p.scrollWidth - 2), { passive: true }));
+  addEventListener('resize', markScroll); document.fonts && document.fonts.ready.then(markScroll);
+  paintDone(); apply(); markScroll();
 })();
 '''
 
@@ -448,7 +454,7 @@ page = f'''<!DOCTYPE html>
         <button id="menu" type="button" aria-expanded="false" aria-label="목차 열기"><svg viewBox="0 0 16 16"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg>목차</button>
         <div class="sbox" style="position:relative;flex:1;display:flex;align-items:center">
           <svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4l3.2 3.2"/></svg>
-          <input id="q" type="search" placeholder="함수·상황 검색 (예: 오즈비, 결측)" autocomplete="off" spellcheck="false" aria-label="스니펫 검색">
+          <input id="q" type="search" placeholder="검색 (예: 오즈비)" autocomplete="off" spellcheck="false" aria-label="스니펫 검색">
           <span class="hint"><span id="hitN"></span><kbd>/</kbd><button id="clear" type="button">지우기</button></span>
         </div>
       </div>
