@@ -386,7 +386,8 @@ mae = mean_absolute_error(yr_va, r_pred)
 mse = mean_squared_error(yr_va, r_pred)
 rmse = np.sqrt(mse)                                      # RMSE
 rmsle = np.sqrt(mean_squared_log_error(yr_va, np.clip(r_pred, 0, None)))
-# RMSLE 는 음수 예측에서 오류 → 0 으로 자른 뒤 계산 (제출값도 같이 자른다)
+# 음수 예측이 섞이면 sklearn 1.2 는 오류, 최신은 값이 틀어진다 → 0 으로 자른 뒤 계산
+# 지표가 RMSLE 면 제출값도 np.clip(test_pred, 0, None) 으로 자른다
 r2 = r2_score(yr_va, r_pred)'''),
 ('다른 모델로 바꿔 보기', 'sklearn', False, 'LogisticRegression DecisionTree GradientBoosting LinearRegression 모델 교체',
 '''from sklearn.linear_model import LogisticRegression, LinearRegression
@@ -611,6 +612,7 @@ lr = LogisticRegression(penalty=None, solver='newton-cholesky',
 lr.fit(df[['x', 'x2']], df['label'])
 print(lr.intercept_, lr.coef_)   # statsmodels Logit 과 넷째 자리까지 같다
 # solver·tol 을 빼면 버전에 따라 넷째 자리가 달라진다 — 최종 답은 statsmodels 로
+# penalty 인자는 sklearn 1.10 에서 없어질 예정 (1.8·1.9 는 경고만, 시험장 1.2 는 그대로)
 # 기본값(penalty='l2') 그대로면 계수가 아예 달라진다'''),
 ])
 

@@ -7,6 +7,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 from cards import SECTIONS
 from when import WHEN
+from legacy_ids import LEGACY_IDS
 
 KW = r'\b(?:import|from|as|def|for|in|return|if|else|lambda|None|True|False|not|and|or|with)\b'
 TOK = re.compile(r"(?P<c>#[^\n]*)|(?P<s>'[^'\n]*'|\"[^\"\n]*\")|(?P<k>%s)|(?P<n>\b\d+(?:\.\d+)?\b)|(?P<f>\b[A-Za-z_]\w*(?=\())" % KW)
@@ -46,7 +47,7 @@ for i, s in enumerate(SECTIONS):
     for j, (title, tag, hot, kw, code) in enumerate(s['cards']):
         # id 는 제목에서 만든다 — 카드를 끼워 넣어도 다른 카드의 외움 기록이 밀리지 않게
         aid = f'{s["id"]}-{hashlib.md5(title.encode()).hexdigest()[:6]}'
-        old = f'{s["id"]}-{j+1}'   # 예전 순번 id — 외움 기록 옮기기용
+        old = LEGACY_IDS.get(title, '')   # 예전 순번 id — 외움 기록 옮기기용 (고정 표)
         flag = f'<span class="flag">{html.escape(tag)}</span>' if hot else f'<span class="lib">{html.escape(tag)}</span>'
         rows.append(f'''<article class="snip{' is-hot' if hot else ''}" id="{aid}" data-old="{old}" data-g="{g}" data-hot="{int(hot)}" data-k="{html.escape(kw)}">
   <span class="snip-no" aria-hidden="true">{i+1:02d}.{j+1}</span>
@@ -180,6 +181,7 @@ body.filtering section.first-shown{padding-top:28px}
 .legend span{display:inline-flex;align-items:center;gap:8px}
 .legend .tick{width:22px;height:12px;background:var(--hl)}
 section{padding-top:64px}
+section:focus{outline:none}
 .sec-head{display:grid;grid-template-columns:56px 1fr;column-gap:0;padding-top:14px;border-top:1px solid var(--ink)}
 .sec-no{font-size:13px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:6px}
 .sec-head h2{margin:0;font-size:22px;letter-spacing:-.02em;line-height:1.35;font-weight:600}
@@ -276,6 +278,7 @@ body.memo .snip:not(.shown) .reveal:hover{background:var(--veil-on)}
   .meta{grid-column:2;grid-row:1;display:block;padding-right:16px}
   .code{grid-column:3;grid-row:1}
   body.memo .snip pre{filter:none!important;opacity:1!important}
+  .code.scrolls::after{display:none!important}
   section{padding-top:20px}.sec-head{break-after:avoid}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
@@ -310,8 +313,9 @@ JS = r'''
   function loadDone() {
     let raw = store.get('bdps.done', null);
     if (raw === null) {
-      const old = store.get('bd.done', null), map = new Map(snips.map(s => [s.dataset.old, s.id]));
+      const old = store.get('bd.done', null), map = new Map(snips.filter(s => s.dataset.old).map(s => [s.dataset.old, s.id]));
       raw = Array.isArray(old) ? old.map(x => map.get(x)) : [];
+      if (store.get('bd.memo', false) === true) { store.set('bdps.memo', true); st.memo = true; }
       store.del('bd.done'); store.del('bd.memo');
     }
     return new Set((Array.isArray(raw) ? raw : []).filter(x => typeof x === 'string' && IDS.has(x)));
@@ -362,8 +366,8 @@ JS = r'''
     $('#hitN').textContent = filtering ? n + '개' : '';
     $('.empty').style.display = n ? 'none' : 'block';
     $('#emptyQ').textContent = t ? `「${st.q.trim()}」에 맞는 스니펫이 없다` : '조건에 맞는 스니펫이 없다';
-    clear.style.display = st.q ? 'inline-block' : 'none';
-    $('.search kbd').style.display = st.q ? 'none' : '';
+    clear.style.display = st.q.trim() ? 'inline-block' : 'none';
+    $('.search kbd').style.display = st.q.trim() ? 'none' : '';
     syncURL();
     requestAnimationFrame(markScroll);
   }
@@ -421,15 +425,22 @@ JS = r'''
 
   // 휴대폰 목차 서랍 — 닫혀 있으면 키보드 포커스가 들어가지 못하게(inert), 열고 닫을 때 포커스를 옮긴다
   const narrow = matchMedia('(max-width: 900px)');
-  const syncInert = () => { side.inert = narrow.matches && !document.body.classList.contains('nav-open'); };
+  const main = $('.main');
+  const syncInert = () => { const open = document.body.classList.contains('nav-open'); side.inert = narrow.matches && !open; main.inert = narrow.matches && open; };
   function closeNav(refocus) { document.body.classList.remove('nav-open'); menu.setAttribute('aria-expanded', false); syncInert(); if (refocus) menu.focus(); }
   menu.addEventListener('click', () => {
     const o = document.body.classList.toggle('nav-open'); menu.setAttribute('aria-expanded', o); syncInert();
     if (o) (side.querySelector('.toc a:not([aria-disabled])') || side).focus();
   });
   $('.scrim').addEventListener('click', () => closeNav(true));
-  links.forEach(a => a.addEventListener('click', () => closeNav(false)));
-  narrow.addEventListener ? narrow.addEventListener('change', syncInert) : narrow.addListener(syncInert);
+  links.forEach(a => a.addEventListener('click', () => {
+    if (a.getAttribute('aria-disabled') === 'true') return;
+    closeNav(false);
+    const t = document.getElementById(a.dataset.sec);   // 이동한 섹션으로 포커스 — inert 로 떨어지지 않게
+    if (t) { t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true }); }
+  }));
+  const onNarrow = () => { if (!narrow.matches && document.body.classList.contains('nav-open')) closeNav(false); syncInert(); };
+  narrow.addEventListener ? narrow.addEventListener('change', onNarrow) : narrow.addListener(onNarrow);
   $('#resetDone').addEventListener('click', () => { if (!done.size) return; done.clear(); saveDone(); paintDone(); apply(); say('외움 표시를 모두 지웠다'); });
 
   q.value = st.q;

@@ -2,7 +2,7 @@
 필요: pandas · numpy · scikit-learn · scipy · statsmodels · Pillow
 
 1. 스니펫 실행 — 75개 코드를 가짜 데이터로 전부 실제 실행한다.
-   준비 코드(setup)는 가짜 데이터만 만든다. import 와 함수는 화면 순서대로 앞 카드에서
+   준비 코드(setup)는 가짜 데이터만 만든다. import(pd·np 포함)와 함수는 화면 순서대로 앞 카드에서
    정의된 것만 이어받는다 — 화면의 import 줄을 지우면 여기서 실패한다.
 2. 주석 검산   — 주석에 쓴 주장(버림 방향, sklearn = statsmodels 계수 등)을 숫자로 확인한다.
 3. 페이지 점검 — index.html 이 build.py 결과와 통째로 같은지, 공유 카드·아이콘·404,
@@ -43,11 +43,18 @@ builtins.help = lambda *a, **k: None             # 시험장 카드의 help() �
 n_run = 0
 for s in SECTIONS:
     with tempfile.TemporaryDirectory() as tmp:
+      try:
         os.chdir(tmp)
         ns = {}
-        exec(s['setup'], ns)
+        try:
+            exec(s['setup'], ns)
+        except BaseException as e:
+            fails.append(f'준비 코드 실패 [{s["id"]}]: {type(e).__name__} {e}')
+            continue
         leaked = [k for k, v in ns.items() if isinstance(v, types.ModuleType) and k not in SETUP_MODULES]
         ok(not leaked, f'준비 코드가 import 를 대신 넣는다 [{s["id"]}]: {leaked} — 화면 카드에서 import 할 것')
+        for k in [k for k, v in ns.items() if isinstance(v, types.ModuleType)]:
+            del ns[k]                              # pd·np·os 도 화면 카드에서 가져와야 한다
         for k, v in carry.items():
             ns.setdefault(k, v)
         for title, tag, hot, kw, code in s['cards']:
@@ -66,7 +73,8 @@ for s in SECTIONS:
             for k, v in ns.items():
                 if not k.startswith('__') and before.get(k) != id(v) and is_tool(v):
                     carry[k] = v
-        os.chdir(HERE)
+      finally:
+        os.chdir(HERE)                             # 임시 폴더를 지울 수 있게 먼저 빠져나온다
 builtins.help = real_help
 print(f'1. 스니펫 실행  {n_run}개')
 

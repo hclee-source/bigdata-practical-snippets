@@ -135,6 +135,7 @@ body.filtering section.first-shown{padding-top:28px}
 .legend span{display:inline-flex;align-items:center;gap:8px}
 .legend .tick{width:22px;height:12px;background:var(--hl)}
 section{padding-top:64px}
+section:focus{outline:none}
 .sec-head{display:grid;grid-template-columns:56px 1fr;column-gap:0;padding-top:14px;border-top:1px solid var(--ink)}
 .sec-no{font-size:13px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:6px}
 .sec-head h2{margin:0;font-size:22px;letter-spacing:-.02em;line-height:1.35;font-weight:600}
@@ -231,6 +232,7 @@ body.memo .snip:not(.shown) .reveal:hover{background:var(--veil-on)}
   .meta{grid-column:2;grid-row:1;display:block;padding-right:16px}
   .code{grid-column:3;grid-row:1}
   body.memo .snip pre{filter:none!important;opacity:1!important}
+  .code.scrolls::after{display:none!important}
   section{padding-top:20px}.sec-head{break-after:avoid}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
@@ -1228,7 +1230,8 @@ mae = <span class="f">mean_absolute_error</span>(yr_va, r_pred)
 mse = <span class="f">mean_squared_error</span>(yr_va, r_pred)
 rmse = np.<span class="f">sqrt</span>(mse)                                      <span class="c"># RMSE</span>
 rmsle = np.<span class="f">sqrt</span>(<span class="f">mean_squared_log_error</span>(yr_va, np.<span class="f">clip</span>(r_pred, <span class="n">0</span>, <span class="k">None</span>)))
-<span class="c"># RMSLE 는 음수 예측에서 오류 → 0 으로 자른 뒤 계산 (제출값도 같이 자른다)</span>
+<span class="c"># 음수 예측이 섞이면 sklearn 1.2 는 오류, 최신은 값이 틀어진다 → 0 으로 자른 뒤 계산</span>
+<span class="c"># 지표가 RMSLE 면 제출값도 np.clip(test_pred, 0, None) 으로 자른다</span>
 r2 = <span class="f">r2_score</span>(yr_va, r_pred)</code></pre>
     <button type="button" class="reveal">눌러서 코드 보기</button>
   </div>
@@ -1894,6 +1897,7 @@ lr = <span class="f">LogisticRegression</span>(penalty=<span class="k">None</spa
 lr.<span class="f">fit</span>(df[[<span class="s">'x'</span>, <span class="s">'x2'</span>]], df[<span class="s">'label'</span>])
 <span class="f">print</span>(lr.intercept_, lr.coef_)   <span class="c"># statsmodels Logit 과 넷째 자리까지 같다</span>
 <span class="c"># solver·tol 을 빼면 버전에 따라 넷째 자리가 달라진다 — 최종 답은 statsmodels 로</span>
+<span class="c"># penalty 인자는 sklearn 1.10 에서 없어질 예정 (1.8·1.9 는 경고만, 시험장 1.2 는 그대로)</span>
 <span class="c"># 기본값(penalty='l2') 그대로면 계수가 아예 달라진다</span></code></pre>
     <button type="button" class="reveal">눌러서 코드 보기</button>
   </div>
@@ -1998,8 +2002,9 @@ pd.<span class="f">set_option</span>(<span class="s">'display.float_format'</spa
   function loadDone() {
     let raw = store.get('bdps.done', null);
     if (raw === null) {
-      const old = store.get('bd.done', null), map = new Map(snips.map(s => [s.dataset.old, s.id]));
+      const old = store.get('bd.done', null), map = new Map(snips.filter(s => s.dataset.old).map(s => [s.dataset.old, s.id]));
       raw = Array.isArray(old) ? old.map(x => map.get(x)) : [];
+      if (store.get('bd.memo', false) === true) { store.set('bdps.memo', true); st.memo = true; }
       store.del('bd.done'); store.del('bd.memo');
     }
     return new Set((Array.isArray(raw) ? raw : []).filter(x => typeof x === 'string' && IDS.has(x)));
@@ -2050,8 +2055,8 @@ pd.<span class="f">set_option</span>(<span class="s">'display.float_format'</spa
     $('#hitN').textContent = filtering ? n + '개' : '';
     $('.empty').style.display = n ? 'none' : 'block';
     $('#emptyQ').textContent = t ? `「${st.q.trim()}」에 맞는 스니펫이 없다` : '조건에 맞는 스니펫이 없다';
-    clear.style.display = st.q ? 'inline-block' : 'none';
-    $('.search kbd').style.display = st.q ? 'none' : '';
+    clear.style.display = st.q.trim() ? 'inline-block' : 'none';
+    $('.search kbd').style.display = st.q.trim() ? 'none' : '';
     syncURL();
     requestAnimationFrame(markScroll);
   }
@@ -2109,15 +2114,22 @@ pd.<span class="f">set_option</span>(<span class="s">'display.float_format'</spa
 
   // 휴대폰 목차 서랍 — 닫혀 있으면 키보드 포커스가 들어가지 못하게(inert), 열고 닫을 때 포커스를 옮긴다
   const narrow = matchMedia('(max-width: 900px)');
-  const syncInert = () => { side.inert = narrow.matches && !document.body.classList.contains('nav-open'); };
+  const main = $('.main');
+  const syncInert = () => { const open = document.body.classList.contains('nav-open'); side.inert = narrow.matches && !open; main.inert = narrow.matches && open; };
   function closeNav(refocus) { document.body.classList.remove('nav-open'); menu.setAttribute('aria-expanded', false); syncInert(); if (refocus) menu.focus(); }
   menu.addEventListener('click', () => {
     const o = document.body.classList.toggle('nav-open'); menu.setAttribute('aria-expanded', o); syncInert();
     if (o) (side.querySelector('.toc a:not([aria-disabled])') || side).focus();
   });
   $('.scrim').addEventListener('click', () => closeNav(true));
-  links.forEach(a => a.addEventListener('click', () => closeNav(false)));
-  narrow.addEventListener ? narrow.addEventListener('change', syncInert) : narrow.addListener(syncInert);
+  links.forEach(a => a.addEventListener('click', () => {
+    if (a.getAttribute('aria-disabled') === 'true') return;
+    closeNav(false);
+    const t = document.getElementById(a.dataset.sec);   // 이동한 섹션으로 포커스 — inert 로 떨어지지 않게
+    if (t) { t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true }); }
+  }));
+  const onNarrow = () => { if (!narrow.matches && document.body.classList.contains('nav-open')) closeNav(false); syncInert(); };
+  narrow.addEventListener ? narrow.addEventListener('change', onNarrow) : narrow.addListener(onNarrow);
   $('#resetDone').addEventListener('click', () => { if (!done.size) return; done.clear(); saveDone(); paintDone(); apply(); say('외움 표시를 모두 지웠다'); });
 
   q.value = st.q;
