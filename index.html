@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>빅데이터분석기사 실기 파이썬 스니펫</title>
+<meta name="description" content="빅데이터분석기사 실기 작업형 1·2·3 파이썬 스니펫 75개. 감점 포인트 12개, 복사·검색·암기 모드.">
+
+<!-- 공유 카드(카카오톡·슬랙·트위터).
+     og:image·twitter:image는 반드시 절대 주소여야 합니다 — 카카오톡은 상대 경로를 읽지 못합니다.
+     저장소 이름이나 도메인을 바꾸면 아래 세 URL도 같이 바꿔 주세요. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="골든래빗">
+<meta property="og:title" content="빅데이터분석기사 실기 파이썬 스니펫">
+<meta property="og:description" content="작업형 1·2·3에 쓰는 코드 75개. 감점 포인트 12개와 암기 모드까지.">
+<meta property="og:url" content="https://hclee-source.github.io/bigdata-practical-snippets/">
+<meta property="og:image" content="https://hclee-source.github.io/bigdata-practical-snippets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="빅데이터분석기사 실기 파이썬 스니펫">
+<meta name="twitter:description" content="작업형 1·2·3에 쓰는 코드 75개. 감점 포인트 12개와 암기 모드까지.">
+<meta name="twitter:image" content="https://hclee-source.github.io/bigdata-practical-snippets/og.png">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#fbf8f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101513" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --green:#146c50; --green-ink:#0f5640; --mint:#e7f2ed; --on-green:#ffffff;
+  --paper:#fbf8f1; --sheet:#ffffff; --ink:#1b211e; --ink-2:#4a524d; --muted:#687069;
+  --rule:#e6e1d4; --rule-2:#efebe1; --rule-3:#cfc8b8;
+  --code:#f5f2ea; --amber:#b7791f; --amber-ink:#8a5a12; --amber-wash:#fdf3df; --mark:#fbe7a6;
+  --k:#146c50; --s:#8f5310; --c:#666d67; --n:#a83d29; --f:#1d5b86;
+  --top-bg:rgba(251,248,241,.92); --tog:#d6d1c4; --ring:rgba(20,108,80,.14); --veil:rgba(251,248,241,.35); --veil-on:rgba(231,242,237,.6);
+  --toast-bg:#1b211e; --toast-fg:#ffffff; --shadow:rgba(27,33,30,.12);
+  --side:264px;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono","D2Coding",Consolas,"Pretendard Variable",monospace;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){:root{
+  --green:#6ecfa8; --green-ink:#8fe0bd; --mint:#183429; --on-green:#0c1714;
+  --paper:#101513; --sheet:#161c19; --ink:#e6ece9; --ink-2:#b3c0ba; --muted:#8e9c96;
+  --rule:#27302c; --rule-2:#222a26; --rule-3:#3a4540;
+  --code:#1a201d; --amber:#e0a84a; --amber-ink:#f1c27a; --amber-wash:#3a2c14; --mark:#5a4a1a;
+  --k:#7fd6b1; --s:#e6b77f; --c:#8b9892; --n:#f29a86; --f:#8cc4ef;
+  --top-bg:rgba(16,21,19,.9); --tog:#3a4540; --ring:rgba(110,207,168,.2); --veil:rgba(16,21,19,.3); --veil-on:rgba(24,52,41,.6);
+  --toast-bg:#e6ece9; --toast-fg:#101513; --shadow:rgba(0,0,0,.4);
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:132px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* ── 사이드 목차 ── */
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--sheet);border-right:1px solid var(--rule);display:flex;flex-direction:column;z-index:30}
+.brand{padding:22px 22px 18px;border-bottom:1px solid var(--rule-2)}
+.brand-row{display:flex;align-items:center;gap:10px}
+.mark{width:30px;height:30px;border-radius:8px;background:var(--green);display:grid;place-items:center;flex:none}
+.mark i{width:9px;height:9px;border-radius:50%;background:var(--on-green)}
+.brand-row b{display:block;font-size:15px;letter-spacing:-.01em}
+.brand small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
+.progress{margin-top:16px}
+.progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink-2)}
+.progress-row strong{font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.progress-row strong span{font-size:12px;color:var(--muted);font-weight:500}
+.bar{height:5px;background:var(--rule-2);border-radius:99px;margin-top:7px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px;transition:width .3s ease}
+.toc{flex:1;overflow-y:auto;padding:10px 12px 18px}
+.toc-group{margin-top:14px}
+.toc-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 10px 6px;font-size:12px;font-weight:700;color:var(--ink)}
+.toc-head em{font-style:normal;font-weight:500;color:var(--muted);font-size:11.5px}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc a{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:13.5px;transition:background .12s,color .12s}
+.toc a:hover{background:var(--paper);color:var(--ink)}
+.toc a.on{background:var(--mint);color:var(--green-ink);font-weight:600}
+.toc-no{font:600 11px/1 var(--mono);color:var(--muted);width:18px}
+.toc a.on .toc-no{color:var(--green)}
+.toc-t{flex:1;min-width:0}
+.toc-c{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.toc a.dim{opacity:.38}
+.side-foot{padding:14px 22px 18px;border-top:1px solid var(--rule-2);font-size:12px;color:var(--muted);line-height:1.8}
+kbd{font:600 11px/1 var(--mono);background:var(--paper);border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:2px 5px;color:var(--ink-2)}
+
+/* ── 상단 도구 ── */
+.main{margin-left:var(--side);min-height:100vh}
+.top{position:sticky;top:0;z-index:20;background:var(--top-bg);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--rule)}
+.top-in{max-width:1040px;margin:0 auto;padding:14px 40px 12px}
+.search{position:relative;display:flex;align-items:center}
+.sbox>svg{position:absolute;left:14px;width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:1.8}
+#q{width:100%;height:44px;padding:0 92px 0 40px;border:1px solid var(--rule);border-radius:11px;background:var(--sheet);font:inherit;font-size:15px;color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
+#q::placeholder{color:var(--muted)}
+#q::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+body.filtering .hero{display:none}
+body.filtering section:first-of-type{padding-top:24px}
+#q:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--ring)}
+.search .hint{position:absolute;right:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+#clear{display:none;border:0;background:var(--rule-2);border-radius:6px;padding:3px 8px;font-size:12px;color:var(--ink-2)}
+.filters{display:flex;align-items:center;gap:14px;margin-top:11px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--rule-2);border-radius:9px;padding:3px}
+.seg button{border:0;background:none;padding:5px 12px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--sheet);color:var(--green-ink);box-shadow:0 1px 2px var(--shadow)}
+.tog{display:inline-flex;align-items:center;gap:7px;border:0;background:none;padding:4px 2px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.tog i{width:30px;height:18px;border-radius:99px;background:var(--tog);position:relative;transition:background .15s;flex:none}
+.tog i::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
+.tog[aria-pressed="true"]{color:var(--ink)}
+.tog.link svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.tog.link:hover{color:var(--green-ink)}
+.tog[aria-pressed="true"] i{background:var(--green)}
+.tog[aria-pressed="true"] i::after{transform:translateX(12px)}
+.count{margin-left:auto;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.count b{color:var(--ink);font-weight:600}
+#menu{display:none}
+
+/* ── 본문 ── */
+.content{max-width:1040px;margin:0 auto;padding:8px 40px 80px}
+.hero{padding:40px 0 8px}
+.hero h1{margin:0;font-size:30px;line-height:1.3;letter-spacing:-.03em;font-weight:700}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero p{margin:10px 0 0;color:var(--ink-2);max-width:600px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+section{padding-top:44px}
+.sec-head{padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.eyebrow{margin:0;font:600 12px/1 var(--sans);color:var(--green);letter-spacing:.02em}
+.eyebrow span{color:var(--muted);margin:0 2px}
+.sec-head h2{margin:8px 0 0;font-size:22px;letter-spacing:-.02em;line-height:1.35}
+.sec-desc{margin:6px 0 0;color:var(--ink-2);font-size:14px}
+
+.snip{display:grid;grid-template-columns:232px minmax(0,1fr);gap:28px;padding:22px 0;border-bottom:1px solid var(--rule);position:relative}
+.snip.is-hot::before{content:"";position:absolute;left:-16px;top:22px;bottom:22px;width:3px;border-radius:3px;background:var(--amber)}
+.meta{min-width:0}
+.meta-top{min-height:20px}
+.flag{display:inline-block;font-size:11.5px;font-weight:700;color:var(--amber-ink);background:var(--amber-wash);border-radius:5px;padding:2px 7px}
+.lib{font:500 11.5px/1.6 var(--mono);color:var(--muted)}
+.snip h3{margin:5px 0 0;font-size:16px;line-height:1.4;letter-spacing:-.015em}
+.snip h3 mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
+.when{margin:5px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.acts{display:flex;gap:6px;margin-top:12px}
+.act{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border:1px solid var(--rule);background:var(--sheet);border-radius:8px;font-size:12.5px;color:var(--ink-2);transition:border-color .12s,background .12s,color .12s}
+.act:hover{border-color:var(--rule-3);color:var(--ink)}
+.act svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.act.copied{border-color:var(--green);color:var(--green-ink);background:var(--mint)}
+.done[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.snip.is-done h3{color:var(--ink-2)}
+.code{position:relative;min-width:0}
+.code pre{margin:0;background:var(--code);border-radius:10px;padding:16px 18px;overflow-x:auto;font:400 13px/1.7 var(--mono);color:var(--ink);tab-size:4;font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0}
+.code pre .k{color:var(--k);font-weight:600}
+.code pre .s{color:var(--s)}
+.code pre .c{color:var(--c)}
+.code pre .n{color:var(--n)}
+.code pre .f{color:var(--f)}
+.reveal{display:none}
+body.memo .snip:not(.shown) pre{filter:blur(6px);user-select:none;opacity:.55}
+body.memo .snip:not(.shown) .reveal{display:flex;position:absolute;inset:0;align-items:center;justify-content:center;border:1.5px dashed var(--rule-3);background:var(--veil);border-radius:10px;font-size:13.5px;font-weight:600;color:var(--green-ink)}
+body.memo .snip:not(.shown) .reveal:hover{background:var(--veil-on)}
+
+.empty{display:none;padding:70px 0;text-align:center;color:var(--ink-2)}
+.empty b{display:block;font-size:17px;color:var(--ink);margin-bottom:6px}
+.empty button{margin-top:16px;border:1px solid var(--green);background:var(--sheet);color:var(--green-ink);border-radius:9px;padding:8px 16px;font-weight:600;font-size:13.5px}
+.foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,12px);background:var(--toast-bg);color:var(--toast-fg);font-size:13px;padding:9px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:60}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.scrim{display:none}
+
+#hitN{display:none;font-variant-numeric:tabular-nums}
+@media (max-width:1180px){
+  .count{display:none}
+  #hitN{display:inline}
+  .snip{grid-template-columns:1fr;gap:12px}
+  .acts{margin-top:10px}
+  .meta{display:grid;grid-template-columns:1fr auto;column-gap:16px;align-items:end}
+  .meta-top,.meta h3,.when{grid-column:1}
+  .acts{grid-column:2;grid-row:1 / span 3;align-self:end}
+}
+@media (max-width:900px){
+  :root{--side:0px}
+  html{scroll-padding-top:150px}
+  .side{width:300px;transform:translateX(-100%);transition:transform .22s ease;box-shadow:none}
+  body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+  body.nav-open .scrim{display:block;position:fixed;inset:0;background:rgba(27,33,30,.32);z-index:25}
+  .top-in{padding:10px 16px}
+  .content{padding:0 16px 60px}
+  #menu{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;margin-right:8px;border:1px solid var(--rule);background:var(--sheet);border-radius:11px;font-size:13.5px;font-weight:600;flex:none}
+  #menu svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none}
+  .search .hint kbd,.keys{display:none}
+  #q{padding-right:110px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;gap:12px;scrollbar-width:none;margin-right:-16px;padding-right:16px}
+  .filters::-webkit-scrollbar{display:none}
+  .count{display:none}
+  .hero{padding-top:26px}
+  .hero h1{font-size:24px}
+  .snip.is-hot::before{left:-10px}
+  .meta{display:block}
+  .acts{margin-top:10px}
+  .code pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12.5px;padding:14px}
+}
+@media print{
+  :root{
+  --green:#146c50; --green-ink:#0f5640; --mint:#e7f2ed; --on-green:#ffffff;
+  --paper:#fbf8f1; --sheet:#ffffff; --ink:#1b211e; --ink-2:#4a524d; --muted:#687069;
+  --rule:#e6e1d4; --rule-2:#efebe1; --rule-3:#cfc8b8;
+  --code:#f5f2ea; --amber:#b7791f; --amber-ink:#8a5a12; --amber-wash:#fdf3df; --mark:#fbe7a6;
+  --k:#146c50; --s:#8f5310; --c:#666d67; --n:#a83d29; --f:#1d5b86;
+  --top-bg:rgba(251,248,241,.92); --tog:#d6d1c4; --ring:rgba(20,108,80,.14); --veil:rgba(251,248,241,.35); --veil-on:rgba(231,242,237,.6);
+  --toast-bg:#1b211e; --toast-fg:#ffffff; --shadow:rgba(27,33,30,.12);
+  }
+  .side,.top,.acts,.reveal,.legend,.toast{display:none!important}
+  .main{margin:0}.content{max-width:none;padding:0}
+  body{background:#fff;font-size:12px}
+  .code pre{background:#fff}
+  .snip{grid-template-columns:180px 1fr;break-inside:avoid;padding:12px 0}
+  .snip.is-hot::before{left:-8px}
+  body.memo .snip pre{filter:none!important;opacity:1!important}
+  .code pre{white-space:pre-wrap;font-size:11px;border:1px solid var(--rule)}
+  section{padding-top:20px}.sec-head{break-after:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<aside class="side" aria-label="목차">
+  <div class="brand">
+    <div class="brand-row"><span class="mark"><i></i></span><div><b>빅분기 실기 스니펫</b><small>빠르게 따는 빅데이터분석기사 실기</small></div></div>
+    <div class="progress">
+      <div class="progress-row"><span>외운 스니펫</span><strong><b id="doneN">0</b> <span>/ 75</span></strong></div>
+      <div class="bar"><i></i></div>
+    </div>
+  </div>
+  <nav class="toc"><div class="toc-group" data-g="t1"><div class="toc-head"><span>작업형 1</span><em>데이터 처리</em></div><ol><li><a href="#t1base" data-sec="t1base"><span class="toc-no">01</span><span class="toc-t">판다스 기본</span><span class="toc-c" data-count="t1base">6</span></a></li><li><a href="#t1prep" data-sec="t1prep"><span class="toc-no">02</span><span class="toc-t">결측치 · 이상치</span><span class="toc-c" data-count="t1prep">6</span></a></li><li><a href="#t1derive" data-sec="t1derive"><span class="toc-no">03</span><span class="toc-t">파생변수 · 문자열 · 날짜</span><span class="toc-c" data-count="t1derive">5</span></a></li><li><a href="#t1agg" data-sec="t1agg"><span class="toc-no">04</span><span class="toc-t">집계 · 병합</span><span class="toc-c" data-count="t1agg">6</span></a></li><li><a href="#t1answer" data-sec="t1answer"><span class="toc-no">05</span><span class="toc-t">답안 처리</span><span class="toc-c" data-count="t1answer">4</span></a></li></ol></div><div class="toc-group" data-g="t2"><div class="toc-head"><span>작업형 2</span><em>모델 · 제출</em></div><ol><li><a href="#t2prep" data-sec="t2prep"><span class="toc-no">06</span><span class="toc-t">전처리</span><span class="toc-c" data-count="t2prep">8</span></a></li><li><a href="#t2model" data-sec="t2model"><span class="toc-no">07</span><span class="toc-t">모델 · 검증</span><span class="toc-c" data-count="t2model">8</span></a></li><li><a href="#t2submit" data-sec="t2submit"><span class="toc-no">08</span><span class="toc-t">제출 파일</span><span class="toc-c" data-count="t2submit">3</span></a></li></ol></div><div class="toc-group" data-g="t3"><div class="toc-head"><span>작업형 3</span><em>통계 검정</em></div><ol><li><a href="#t3test" data-sec="t3test"><span class="toc-no">09</span><span class="toc-t">t-검정 · 비율 검정</span><span class="toc-c" data-count="t3test">9</span></a></li><li><a href="#t3anova" data-sec="t3anova"><span class="toc-no">10</span><span class="toc-t">분산분석 · 카이제곱</span><span class="toc-c" data-count="t3anova">6</span></a></li><li><a href="#t3reg" data-sec="t3reg"><span class="toc-no">11</span><span class="toc-t">상관 · 회귀</span><span class="toc-c" data-count="t3reg">7</span></a></li><li><a href="#t3logit" data-sec="t3logit"><span class="toc-no">12</span><span class="toc-t">로지스틱 회귀</span><span class="toc-c" data-count="t3logit">4</span></a></li></ol></div><div class="toc-group" data-g="env"><div class="toc-head"><span>시험장</span><em>도움말 · 출력</em></div><ol><li><a href="#env" data-sec="env"><span class="toc-no">13</span><span class="toc-t">시험장에서</span><span class="toc-c" data-count="env">3</span></a></li></ol></div></nav>
+  <div class="side-foot"><span class="keys"><kbd>/</kbd> 검색 &nbsp;·&nbsp; <kbd>Esc</kbd> 지우기<br></span><button id="resetDone" type="button" style="border:0;background:none;padding:6px 0;color:var(--muted);text-decoration:underline;font-size:12px">외움 표시 모두 지우기</button></div>
+</aside>
+<div class="scrim"></div>
+
+<div class="main">
+  <div class="top">
+    <div class="top-in">
+      <div class="search">
+        <button id="menu" type="button" aria-expanded="false" aria-label="목차 열기"><svg viewBox="0 0 16 16"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg>목차</button>
+        <div class="sbox" style="position:relative;flex:1;display:flex;align-items:center">
+          <svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4l3.2 3.2"/></svg>
+          <input id="q" type="search" placeholder="함수·상황 검색 (예: 오즈비, 결측)" autocomplete="off" spellcheck="false" aria-label="스니펫 검색">
+          <span class="hint"><span id="hitN"></span><kbd>/</kbd><button id="clear" type="button">지우기</button></span>
+        </div>
+      </div>
+      <div class="filters" role="toolbar" aria-label="보기 설정">
+        <div class="seg" role="group" aria-label="작업형">
+          <button type="button" data-g="all" aria-pressed="true">전체</button>
+          <button type="button" data-g="t1" aria-pressed="false">작업형 1</button>
+          <button type="button" data-g="t2" aria-pressed="false">작업형 2</button>
+          <button type="button" data-g="t3" aria-pressed="false">작업형 3</button>
+        </div>
+        <button type="button" class="tog" id="tHot" aria-pressed="false"><i></i>감점 포인트만</button>
+        <button type="button" class="tog" id="tTodo" aria-pressed="false"><i></i>안 외운 것만</button>
+        <button type="button" class="tog" id="tMemo" aria-pressed="false"><i></i>암기 모드</button>
+        <button type="button" class="tog link" id="share"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.6 9.4l2.8-2.8M7.3 4.6l1-1a2.6 2.6 0 0 1 3.7 3.7l-1 1M8.7 11.4l-1 1A2.6 2.6 0 0 1 4 8.7l1-1"/></svg>링크 복사</button>
+        <span class="count"><b id="shownN">75</b> / 75개</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="content">
+    <div class="hero">
+      <h1>작업형 1 · 2 · 3에 쓰는 코드, <em>75개</em>로 끝낸다</h1>
+      <p>교재 「빠르게 따는 빅데이터분석기사 실기」의 풀이 코드 관례를 그대로 따랐다. 모든 스니펫은 실제로 실행해 확인했다.</p>
+      <div class="legend">
+        <span><span class="flag">함정 · 필수 · 빈출</span> 감점 포인트 12개 — 왼쪽 노란 선</span>
+        <span>암기 모드 — 코드를 가리고 떠올린 뒤 눌러서 확인</span>
+      </div>
+    </div>
+<section id="t1base" data-g="t1">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 1 <span>·</span> 01</p>
+    <h2>판다스 기본</h2>
+    <p class="sec-desc">불러오기 → 확인 → 조건 → 계산 → print. 작업형 1 은 이 다섯 단계 안에서 끝난다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t1base-1" data-g="t1" data-hot="0" data-k="read_csv shape head info describe 불러오기 확인 to_string">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pandas</span></div>
+    <h3 data-t="불러오기 · 크기 · 앞부분">불러오기 · 크기 · 앞부분</h3>
+    <p class="when">문제를 열자마자. 컬럼 이름과 자료형부터 본다.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="불러오기 · 크기 · 앞부분 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="불러오기 · 크기 · 앞부분 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">import</span> pandas <span class="k">as</span> pd
+<span class="k">import</span> numpy <span class="k">as</span> np
+
+df = pd.<span class="f">read_csv</span>(<span class="s">'data/파일명.csv'</span>)
+<span class="f">print</span>(df.shape)                        <span class="c"># (행, 열)</span>
+<span class="f">print</span>(df.<span class="f">head</span>(<span class="n">3</span>).<span class="f">to_string</span>(index=<span class="k">False</span>))
+df.<span class="f">info</span>()                              <span class="c"># 자료형 · 결측 개수</span>
+<span class="f">print</span>(df.<span class="f">describe</span>())                   <span class="c"># 수치형 요약</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1base-2" data-g="t1" data-hot="0" data-k="loc iloc 컬럼 선택 인덱싱 행 열">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pandas</span></div>
+    <h3 data-t="컬럼 선택 · loc / iloc">컬럼 선택 · loc / iloc</h3>
+    <p class="when">조건에 맞는 행의 특정 컬럼 값이 필요할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="컬럼 선택 · loc / iloc 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="컬럼 선택 · loc / iloc 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'score'</span>]                         <span class="c"># Series</span>
+df[[<span class="s">'group'</span>, <span class="s">'score'</span>]]              <span class="c"># DataFrame</span>
+df.loc[df[<span class="s">'flag'</span>] == <span class="n">1</span>, <span class="s">'amount'</span>]   <span class="c"># 조건 + 컬럼</span>
+df.loc[<span class="n">0</span>, <span class="s">'score'</span>]                  <span class="c"># 라벨 기준</span>
+df.iloc[<span class="n">0</span>, <span class="n">2</span>]                       <span class="c"># 위치 기준 (0번 행, 2번 열)</span>
+df.iloc[:<span class="n">10</span>]                        <span class="c"># 앞 10행</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t1base-3" data-g="t1" data-hot="1" data-k="조건 필터링 &amp; | isin between 괄호 다중 조건 ~">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">빈출</span></div>
+    <h3 data-t="조건 필터링 · 다중 조건">조건 필터링 · 다중 조건</h3>
+    <p class="when">「~이면서 ~인」 행을 고를 때. 조건마다 괄호.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="조건 필터링 · 다중 조건 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="조건 필터링 · 다중 조건 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>cond = (df[<span class="s">'flag'</span>] == <span class="n">1</span>) &amp; (df[<span class="s">'group'</span>] == <span class="s">'G2'</span>)   <span class="c"># 조건마다 괄호</span>
+<span class="f">print</span>(cond.<span class="f">sum</span>())                       <span class="c"># 조건 만족 행 수</span>
+<span class="f">print</span>(df.loc[cond, <span class="s">'amount'</span>].<span class="f">mean</span>())
+
+df[df[<span class="s">'region'</span>].<span class="f">isin</span>([<span class="s">'north'</span>, <span class="s">'east'</span>])]
+df[df[<span class="s">'score'</span>].<span class="f">between</span>(<span class="n">60</span>, <span class="n">80</span>)]        <span class="c"># 60 이상 80 이하 (양 끝 포함)</span>
+df[~(df[<span class="s">'segment'</span>] == <span class="s">'B'</span>)]            <span class="c"># 부정은 ~</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1base-4" data-g="t1" data-hot="0" data-k="정렬 sort_values ascending 상위 N 번째 iloc nlargest">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">sort_values</span></div>
+    <h3 data-t="정렬 후 N번째 값">정렬 후 N번째 값</h3>
+    <p class="when">「상위 N번째」 「가장 큰」 값을 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="정렬 후 N번째 값 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="정렬 후 N번째 값 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>s = df.<span class="f">sort_values</span>(<span class="s">'amount'</span>, ascending=<span class="k">False</span>)
+<span class="f">print</span>(s.iloc[<span class="n">0</span>][<span class="s">'id'</span>])             <span class="c"># 1등</span>
+<span class="f">print</span>(s.iloc[<span class="n">2</span>][<span class="s">'amount'</span>])         <span class="c"># 3등 값</span>
+
+<span class="c"># 여러 기준 정렬</span>
+df.<span class="f">sort_values</span>([<span class="s">'score'</span>, <span class="s">'age'</span>], ascending=[<span class="k">False</span>, <span class="k">True</span>])
+
+df.<span class="f">nlargest</span>(<span class="n">10</span>, <span class="s">'amount'</span>)          <span class="c"># 상위 10행 바로</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t1base-5" data-g="t1" data-hot="1" data-k="value_counts 최빈값 index iloc normalize 비율 mode">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">함정</span></div>
+    <h3 data-t="value_counts — 이름인가 개수인가">value_counts — 이름인가 개수인가</h3>
+    <p class="when">최빈 범주를 물을 때. 답이 이름인지 개수인지 먼저 확인.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="value_counts — 이름인가 개수인가 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="value_counts — 이름인가 개수인가 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>vc = df[<span class="s">'group'</span>].<span class="f">value_counts</span>()
+<span class="f">print</span>(vc.index[<span class="n">0</span>])     <span class="c"># 가장 많은 그룹 「이름」</span>
+<span class="f">print</span>(vc.iloc[<span class="n">0</span>])      <span class="c"># 그 그룹의 「개수」</span>
+
+df[<span class="s">'group'</span>].<span class="f">value_counts</span>(normalize=<span class="k">True</span>)   <span class="c"># 비율</span>
+df[<span class="s">'group'</span>].<span class="f">mode</span>()[<span class="n">0</span>]                      <span class="c"># 최빈값</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1base-6" data-g="t1" data-hot="0" data-k="sum mean median std var max min nunique quantile 분위수 표준편차">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pandas</span></div>
+    <h3 data-t="기초 통계 함수">기초 통계 함수</h3>
+    <p class="when">평균·중앙값·표준편차를 바로 구할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="기초 통계 함수 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="기초 통계 함수 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'score'</span>].<span class="f">sum</span>(); df[<span class="s">'score'</span>].<span class="f">mean</span>(); df[<span class="s">'score'</span>].<span class="f">median</span>()
+df[<span class="s">'score'</span>].<span class="f">std</span>()        <span class="c"># 표본표준편차 (ddof=1)</span>
+df[<span class="s">'score'</span>].<span class="f">std</span>(ddof=<span class="n">0</span>)  <span class="c"># 모표준편차 — 문제에 「모」가 있으면</span>
+df[<span class="s">'score'</span>].<span class="f">var</span>()
+df[<span class="s">'score'</span>].<span class="f">quantile</span>(<span class="n">0.75</span>)
+df[<span class="s">'group'</span>].<span class="f">nunique</span>()    <span class="c"># 고유값 개수</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t1prep" data-g="t1">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 1 <span>·</span> 02</p>
+    <h2>결측치 · 이상치</h2>
+    <p class="sec-desc">「몇 개인가」와 「채운 뒤 계산」이 단골. 채울 값은 반드시 원본에서 먼저 구한다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t1prep-1" data-g="t1" data-hot="0" data-k="결측치 isna isnull sum dropna subset 제거">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">isna</span></div>
+    <h3 data-t="결측치 확인 · 제거">결측치 확인 · 제거</h3>
+    <p class="when">「결측치가 몇 개」 「결측 행 제거 후」 문제.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="결측치 확인 · 제거 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="결측치 확인 · 제거 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="f">print</span>(df.<span class="f">isna</span>().<span class="f">sum</span>())               <span class="c"># 컬럼별 결측 개수</span>
+<span class="f">print</span>(df[<span class="s">'views'</span>].<span class="f">isna</span>().<span class="f">sum</span>())
+<span class="f">print</span>(df.<span class="f">isna</span>().<span class="f">sum</span>().<span class="f">sum</span>())         <span class="c"># 전체 결측 개수</span>
+
+drop_df = df.<span class="f">dropna</span>(subset=[<span class="s">'rating'</span>, <span class="s">'views'</span>])
+<span class="f">print</span>(<span class="f">len</span>(df) - <span class="f">len</span>(drop_df))        <span class="c"># 제거된 행 수</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1prep-2" data-g="t1" data-hot="0" data-k="fillna median mean mode 결측치 대체 채우기">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">fillna</span></div>
+    <h3 data-t="결측치 대체 — 값은 먼저 구한다">결측치 대체 — 값은 먼저 구한다</h3>
+    <p class="when">「중앙값으로 채운 뒤」 계산하는 문제.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="결측치 대체 — 값은 먼저 구한다 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="결측치 대체 — 값은 먼저 구한다 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>work = df.<span class="f">copy</span>()
+med = work[<span class="s">'rating'</span>].<span class="f">median</span>()     <span class="c"># 채우기 「전」 값으로 구한다</span>
+work[<span class="s">'rating'</span>] = work[<span class="s">'rating'</span>].<span class="f">fillna</span>(med)
+
+work[<span class="s">'views'</span>] = work[<span class="s">'views'</span>].<span class="f">fillna</span>(work[<span class="s">'views'</span>].<span class="f">mean</span>())
+work[<span class="s">'status'</span>] = work[<span class="s">'status'</span>].<span class="f">fillna</span>(work[<span class="s">'status'</span>].<span class="f">mode</span>()[<span class="n">0</span>])</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1prep-3" data-g="t1" data-hot="0" data-k="groupby transform 그룹별 중앙값 결측 대체">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">transform</span></div>
+    <h3 data-t="그룹별 값으로 결측치 채우기">그룹별 값으로 결측치 채우기</h3>
+    <p class="when">「그룹별 평균으로 채워라」가 나올 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="그룹별 값으로 결측치 채우기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="그룹별 값으로 결측치 채우기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>work = df.<span class="f">copy</span>()
+grp_med = work.<span class="f">groupby</span>(<span class="s">'group'</span>)[<span class="s">'views'</span>].<span class="f">transform</span>(<span class="s">'median'</span>)
+work[<span class="s">'views'</span>] = work[<span class="s">'views'</span>].<span class="f">fillna</span>(grp_med)
+<span class="c"># 그룹 전체가 결측이면 전체 중앙값으로 한 번 더</span>
+work[<span class="s">'views'</span>] = work[<span class="s">'views'</span>].<span class="f">fillna</span>(work[<span class="s">'views'</span>].<span class="f">median</span>())</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1prep-4" data-g="t1" data-hot="0" data-k="IQR 이상치 quantile 1.5 사분위 lower upper outlier">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">quantile</span></div>
+    <h3 data-t="IQR 이상치">IQR 이상치</h3>
+    <p class="when">「IQR 1.5배 밖」 이상치 개수·제외 평균.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="IQR 이상치 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="IQR 이상치 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>q1 = df[<span class="s">'price'</span>].<span class="f">quantile</span>(<span class="n">0.25</span>)
+q3 = df[<span class="s">'price'</span>].<span class="f">quantile</span>(<span class="n">0.75</span>)
+iqr = q3 - q1
+lower, upper = q1 - <span class="n">1.5</span> * iqr, q3 + <span class="n">1.5</span> * iqr
+
+out = (df[<span class="s">'price'</span>] &lt; lower) | (df[<span class="s">'price'</span>] &gt; upper)
+<span class="f">print</span>(out.<span class="f">sum</span>())                      <span class="c"># 이상치 개수</span>
+<span class="f">print</span>(df.loc[~out, <span class="s">'price'</span>].<span class="f">mean</span>())   <span class="c"># 이상치 제외 평균</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1prep-5" data-g="t1" data-hot="0" data-k="clip 상한 하한 대체 표준화 z-score min-max 정규화">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">clip</span></div>
+    <h3 data-t="이상치 바꾸기 · 표준화">이상치 바꾸기 · 표준화</h3>
+    <p class="when">경계값 대체, z-score, min-max 문제.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="이상치 바꾸기 · 표준화 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="이상치 바꾸기 · 표준화 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>capped = df[<span class="s">'price'</span>].<span class="f">clip</span>(lower, upper)    <span class="c"># 경계값으로 대체</span>
+
+z = (df[<span class="s">'score'</span>] - df[<span class="s">'score'</span>].<span class="f">mean</span>()) / df[<span class="s">'score'</span>].<span class="f">std</span>()
+<span class="f">print</span>((z.<span class="f">abs</span>() &gt; <span class="n">3</span>).<span class="f">sum</span>())                 <span class="c"># |z| &gt; 3 개수</span>
+
+lo, hi = df[<span class="s">'score'</span>].<span class="f">min</span>(), df[<span class="s">'score'</span>].<span class="f">max</span>()
+mm = (df[<span class="s">'score'</span>] - lo) / (hi - lo)              <span class="c"># min-max 0~1</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1prep-6" data-g="t1" data-hot="0" data-k="중복 duplicated drop_duplicates keep">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">duplicated</span></div>
+    <h3 data-t="중복 처리">중복 처리</h3>
+    <p class="when">「중복 제거 후」 행 수나 값을 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="중복 처리 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="중복 처리 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="f">print</span>(df.<span class="f">duplicated</span>().<span class="f">sum</span>())                    <span class="c"># 완전 중복 행 수</span>
+<span class="f">print</span>(df.<span class="f">duplicated</span>(subset=[<span class="s">'id'</span>]).<span class="f">sum</span>())       <span class="c"># id 기준 중복</span>
+dedup = df.<span class="f">drop_duplicates</span>(subset=[<span class="s">'id'</span>], keep=<span class="s">'first'</span>)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t1derive" data-g="t1">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 1 <span>·</span> 03</p>
+    <h2>파생변수 · 문자열 · 날짜</h2>
+    <p class="sec-desc">컬럼을 하나 만들고 그걸로 다시 집계하는 2단계 문제가 대부분이다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t1derive-1" data-g="t1" data-hot="0" data-k="파생변수 pd.cut 구간 bins labels right qcut">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pd.cut</span></div>
+    <h3 data-t="파생변수 · 구간 나누기">파생변수 · 구간 나누기</h3>
+    <p class="when">새 컬럼을 만들거나 구간별로 묶을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="파생변수 · 구간 나누기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="파생변수 · 구간 나누기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'total'</span>] = df[<span class="s">'qty'</span>] * df[<span class="s">'unit_price'</span>]
+df[<span class="s">'is_high'</span>] = (df[<span class="s">'amount'</span>] &gt;= <span class="n">150000</span>).<span class="f">astype</span>(int)
+
+bins = [<span class="n">0</span>, <span class="n">30</span>, <span class="n">40</span>, <span class="n">50</span>, <span class="f">float</span>(<span class="s">'inf'</span>)]
+df[<span class="s">'age_band'</span>] = pd.<span class="f">cut</span>(df[<span class="s">'age'</span>], bins=bins,
+                        labels=[<span class="s">'~29'</span>, <span class="s">'30대'</span>, <span class="s">'40대'</span>, <span class="s">'50+'</span>],
+                        right=<span class="k">False</span>)      <span class="c"># [0,30) [30,40) ...</span>
+df[<span class="s">'q4'</span>] = pd.<span class="f">qcut</span>(df[<span class="s">'score'</span>], <span class="n">4</span>, labels=<span class="k">False</span>)   <span class="c"># 4분위 0~3</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1derive-2" data-g="t1" data-hot="0" data-k="map replace apply lambda np.where 값 변경 조건">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">map</span></div>
+    <h3 data-t="값 바꾸기 · map · apply">값 바꾸기 · map · apply</h3>
+    <p class="when">범주를 숫자로, 조건에 따라 값 지정.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="값 바꾸기 · map · apply 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="값 바꾸기 · map · apply 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'flag_txt'</span>] = df[<span class="s">'flag'</span>].<span class="f">map</span>({<span class="n">1</span>: <span class="s">'Y'</span>, <span class="n">0</span>: <span class="s">'N'</span>})
+df[<span class="s">'status2'</span>] = df[<span class="s">'status'</span>].<span class="f">map</span>({<span class="s">'방문'</span>: <span class="n">1</span>, <span class="s">'취소'</span>: -<span class="n">1</span>, <span class="s">'대기'</span>: <span class="n">0</span>})
+df[<span class="s">'region2'</span>] = df[<span class="s">'region'</span>].<span class="f">replace</span>(<span class="s">'central'</span>, <span class="s">'center'</span>)
+df[<span class="s">'grade'</span>] = np.<span class="f">where</span>(df[<span class="s">'score'</span>] &gt;= <span class="n">70</span>, <span class="s">'pass'</span>, <span class="s">'fail'</span>)
+df[<span class="s">'len'</span>] = df[<span class="s">'name'</span>].<span class="f">apply</span>(<span class="k">lambda</span> x: <span class="f">len</span>(x))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1derive-3" data-g="t1" data-hot="0" data-k="str contains split startswith upper lower replace len 문자열">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">str</span></div>
+    <h3 data-t="문자열 처리">문자열 처리</h3>
+    <p class="when">코드 앞자리, 특정 단어 포함 여부.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="문자열 처리 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="문자열 처리 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'code'</span>].str.<span class="f">split</span>(<span class="s">'-'</span>).str[<span class="n">0</span>]          <span class="c"># 'AB-01' → 'AB'</span>
+df[<span class="s">'code'</span>].str[:<span class="n">2</span>]                        <span class="c"># 앞 두 글자</span>
+df[<span class="s">'name'</span>].str.<span class="f">lower</span>().str.<span class="f">contains</span>(<span class="s">'apple'</span>)
+df[<span class="s">'code'</span>].str.<span class="f">startswith</span>(<span class="s">'AB'</span>)
+df[<span class="s">'name'</span>].str.<span class="f">replace</span>(<span class="s">' '</span>, <span class="s">''</span>)
+df[<span class="s">'name'</span>].str.<span class="f">len</span>()</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1derive-4" data-g="t1" data-hot="0" data-k="날짜 to_datetime dt year month day weekday dayofweek 요일 주말">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">datetime</span></div>
+    <h3 data-t="날짜 처리">날짜 처리</h3>
+    <p class="when">연·월·요일별 집계, 기간 필터.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="날짜 처리 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="날짜 처리 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'date'</span>] = pd.<span class="f">to_datetime</span>(df[<span class="s">'date'</span>])
+df[<span class="s">'year'</span>] = df[<span class="s">'date'</span>].dt.year
+df[<span class="s">'month'</span>] = df[<span class="s">'date'</span>].dt.month
+df[<span class="s">'weekday'</span>] = df[<span class="s">'date'</span>].dt.weekday     <span class="c"># 월=0 … 일=6</span>
+df[<span class="s">'is_weekend'</span>] = (df[<span class="s">'weekday'</span>] &gt;= <span class="n">5</span>).<span class="f">astype</span>(int)
+df[(df[<span class="s">'date'</span>] &gt;= <span class="s">'2024-03-01'</span>) &amp; (df[<span class="s">'date'</span>] &lt; <span class="s">'2024-04-01'</span>)]</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1derive-5" data-g="t1" data-hot="0" data-k="날짜 차이 days 기간 timedelta 일수 경과">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">timedelta</span></div>
+    <h3 data-t="날짜 차이 · 기간">날짜 차이 · 기간</h3>
+    <p class="when">「소요 일수」 「경과 시간」을 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="날짜 차이 · 기간 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="날짜 차이 · 기간 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[<span class="s">'date'</span>] = pd.<span class="f">to_datetime</span>(df[<span class="s">'date'</span>])
+df[<span class="s">'end_date'</span>] = pd.<span class="f">to_datetime</span>(df[<span class="s">'end_date'</span>])
+df[<span class="s">'days'</span>] = (df[<span class="s">'end_date'</span>] - df[<span class="s">'date'</span>]).dt.days
+df[<span class="s">'hours'</span>] = (df[<span class="s">'end_date'</span>] - df[<span class="s">'date'</span>]).dt.<span class="f">total_seconds</span>() / <span class="n">3600</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t1agg" data-g="t1">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 1 <span>·</span> 04</p>
+    <h2>집계 · 병합</h2>
+    <p class="sec-desc">groupby 한 줄로 끝나는 문제와, 결과에서 다시 하나를 고르는 문제로 나뉜다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t1agg-1" data-g="t1" data-hot="0" data-k="groupby mean sum count size 그룹별 집계">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">groupby</span></div>
+    <h3 data-t="groupby 기본">groupby 기본</h3>
+    <p class="when">「그룹별 평균·합계」 문제의 기본형.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="groupby 기본 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="groupby 기본 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df.<span class="f">groupby</span>(<span class="s">'group'</span>)[<span class="s">'amount'</span>].<span class="f">mean</span>()
+df.<span class="f">groupby</span>(<span class="s">'group'</span>)[<span class="s">'amount'</span>].<span class="f">sum</span>().<span class="f">sort_values</span>(ascending=<span class="k">False</span>)
+df.<span class="f">groupby</span>(<span class="s">'group'</span>).<span class="f">size</span>()             <span class="c"># 그룹별 행 수</span>
+df.<span class="f">groupby</span>([<span class="s">'region'</span>, <span class="s">'group'</span>])[<span class="s">'score'</span>].<span class="f">mean</span>().<span class="f">reset_index</span>()</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1agg-2" data-g="t1" data-hot="0" data-k="agg named aggregation 여러 집계 count sum mean">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">agg</span></div>
+    <h3 data-t="agg 이름 붙여 여러 집계">agg 이름 붙여 여러 집계</h3>
+    <p class="when">그룹별로 여러 값을 한 번에 볼 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="agg 이름 붙여 여러 집계 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="agg 이름 붙여 여러 집계 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>summary = df.<span class="f">groupby</span>(<span class="s">'region'</span>).<span class="f">agg</span>(
+    cnt=(<span class="s">'id'</span>, <span class="s">'count'</span>),
+    amount_sum=(<span class="s">'amount'</span>, <span class="s">'sum'</span>),
+    score_mean=(<span class="s">'score'</span>, <span class="s">'mean'</span>),
+).<span class="f">sort_values</span>(<span class="s">'amount_sum'</span>, ascending=<span class="k">False</span>)
+<span class="f">print</span>(summary.<span class="f">round</span>(<span class="n">2</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1agg-3" data-g="t1" data-hot="0" data-k="idxmax idxmin 최대 그룹 이름 abs 절댓값 최대">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">idxmax</span></div>
+    <h3 data-t="집계 결과에서 하나 고르기">집계 결과에서 하나 고르기</h3>
+    <p class="when">「가장 큰 그룹은?」처럼 집계 뒤 하나를 고를 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="집계 결과에서 하나 고르기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="집계 결과에서 하나 고르기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>g = df.<span class="f">groupby</span>(<span class="s">'group'</span>)[<span class="s">'amount'</span>].<span class="f">mean</span>()
+<span class="f">print</span>(g.<span class="f">idxmax</span>(), g.<span class="f">max</span>())     <span class="c"># 평균이 가장 큰 그룹과 그 값</span>
+<span class="f">print</span>(g.<span class="f">idxmin</span>())
+
+bal = df.<span class="f">groupby</span>(<span class="s">'region'</span>)[<span class="s">'flag'</span>].<span class="f">sum</span>()
+key = bal.<span class="f">abs</span>().<span class="f">idxmax</span>()       <span class="c"># 절댓값이 가장 큰 그룹</span>
+<span class="f">print</span>(key, bal.loc[key])       <span class="c"># 값은 원래 부호로</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1agg-4" data-g="t1" data-hot="0" data-k="pivot_table crosstab unstack 교차표 피벗 aggfunc">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pivot</span></div>
+    <h3 data-t="pivot_table · crosstab · unstack">pivot_table · crosstab · unstack</h3>
+    <p class="when">두 범주를 행·열로 펼칠 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="pivot_table · crosstab · unstack 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="pivot_table · crosstab · unstack 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>pt = df.<span class="f">pivot_table</span>(index=<span class="s">'region'</span>, columns=<span class="s">'group'</span>,
+                    values=<span class="s">'amount'</span>, aggfunc=<span class="s">'mean'</span>)
+ct = pd.<span class="f">crosstab</span>(df[<span class="s">'region'</span>], df[<span class="s">'group'</span>])            <span class="c"># 빈도</span>
+ct_r = pd.<span class="f">crosstab</span>(df[<span class="s">'region'</span>], df[<span class="s">'group'</span>], normalize=<span class="s">'index'</span>)  <span class="c"># 행 비율</span>
+wide = df.<span class="f">groupby</span>([<span class="s">'region'</span>, <span class="s">'group'</span>])[<span class="s">'amount'</span>].<span class="f">mean</span>().<span class="f">unstack</span>()</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1agg-5" data-g="t1" data-hot="0" data-k="merge join concat how left inner 병합 결합">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">merge</span></div>
+    <h3 data-t="병합 · 이어 붙이기">병합 · 이어 붙이기</h3>
+    <p class="when">파일이 두 개 주어졌을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="병합 · 이어 붙이기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="병합 · 이어 붙이기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>m = pd.<span class="f">merge</span>(df, other, on=<span class="s">'id'</span>, how=<span class="s">'left'</span>)   <span class="c"># inner/left/right/outer</span>
+both = pd.<span class="f">concat</span>([df, df], axis=<span class="n">0</span>, ignore_index=<span class="k">True</span>)  <span class="c"># 위아래</span>
+side = pd.<span class="f">concat</span>([df, other], axis=<span class="n">1</span>)                  <span class="c"># 좌우</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1agg-6" data-g="t1" data-hot="0" data-k="corr 상관계수 rank cumsum shift diff 누적 순위">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">corr</span></div>
+    <h3 data-t="상관계수 · 순위 · 누적">상관계수 · 순위 · 누적</h3>
+    <p class="when">상관계수, 순위, 누적 합 문제.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="상관계수 · 순위 · 누적 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="상관계수 · 순위 · 누적 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>df[[<span class="s">'age'</span>, <span class="s">'score'</span>, <span class="s">'amount'</span>]].<span class="f">corr</span>()
+df[<span class="s">'age'</span>].<span class="f">corr</span>(df[<span class="s">'score'</span>])                    <span class="c"># 피어슨</span>
+df[<span class="s">'age'</span>].<span class="f">corr</span>(df[<span class="s">'score'</span>], method=<span class="s">'spearman'</span>)
+df[<span class="s">'rank'</span>] = df[<span class="s">'amount'</span>].<span class="f">rank</span>(ascending=<span class="k">False</span>, method=<span class="s">'min'</span>)
+df[<span class="s">'cum'</span>] = df[<span class="s">'amount'</span>].<span class="f">cumsum</span>()
+df[<span class="s">'prev'</span>] = df[<span class="s">'amount'</span>].<span class="f">shift</span>(<span class="n">1</span>)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t1answer" data-g="t1">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 1 <span>·</span> 05</p>
+    <h2>답안 처리</h2>
+    <p class="sec-desc">값은 맞았는데 형식에서 틀린다. 정수인지, 몇째 자리인지, 버림인지 반올림인지부터 본다.</p>
+  </header>
+  <div class="rows">
+<article class="snip is-hot" id="t1answer-1" data-g="t1" data-hot="1" data-k="int round 정수 버림 반올림 소수점 답안">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">함정</span></div>
+    <h3 data-t="정수 처리 — int 는 버림이다">정수 처리 — int 는 버림이다</h3>
+    <p class="when">답안 형식이 「정수」 「소수 N째 자리」일 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="정수 처리 — int 는 버림이다 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="정수 처리 — int 는 버림이다 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>x = df[<span class="s">'amount'</span>].<span class="f">mean</span>()
+<span class="f">print</span>(<span class="f">int</span>(x))          <span class="c"># 소수점 버림 (0 쪽으로 자름)</span>
+<span class="f">print</span>(<span class="f">round</span>(x))        <span class="c"># 반올림 → 정수</span>
+<span class="f">print</span>(<span class="f">round</span>(x, <span class="n">2</span>))     <span class="c"># 소수 둘째 자리까지</span>
+<span class="c"># 「정수로(소수점 이하 버림)」      → int(x)</span>
+<span class="c"># 「소수 셋째 자리에서 반올림」     → round(x, 2)</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1answer-2" data-g="t1" data-hot="0" data-k="floor ceil 음수 내림 올림 trunc np.floor math">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">math</span></div>
+    <h3 data-t="음수 · 올림 · 내림">음수 · 올림 · 내림</h3>
+    <p class="when">값이 음수일 수 있을 때, 올림·내림 지시가 있을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="음수 · 올림 · 내림 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="음수 · 올림 · 내림 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">import</span> math
+<span class="f">print</span>(<span class="f">int</span>(-<span class="n">2.7</span>))         <span class="c"># -2  (0 쪽으로)</span>
+<span class="f">print</span>(math.<span class="f">floor</span>(-<span class="n">2.7</span>))  <span class="c"># -3  (아래로)</span>
+<span class="f">print</span>(math.<span class="f">ceil</span>(<span class="n">2.1</span>))    <span class="c"># 3</span>
+np.<span class="f">floor</span>(df[<span class="s">'score'</span>])    <span class="c"># Series 버림</span>
+np.<span class="f">ceil</span>(df[<span class="s">'score'</span>])</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t1answer-3" data-g="t1" data-hot="0" data-k="sum 개수 정수 bool 결측 개수 행 수">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">sum</span></div>
+    <h3 data-t="처음부터 정수인 값">처음부터 정수인 값</h3>
+    <p class="when">개수를 물을 때. int() 를 따로 안 씌워도 된다.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="처음부터 정수인 값 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="처음부터 정수인 값 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="f">print</span>((df[<span class="s">'amount'</span>] &gt;= <span class="n">150000</span>).<span class="f">sum</span>())   <span class="c"># 조건 만족 개수</span>
+<span class="f">print</span>(df[<span class="s">'views'</span>].<span class="f">isna</span>().<span class="f">sum</span>())         <span class="c"># 결측 개수</span>
+<span class="f">print</span>(df[<span class="s">'flag'</span>].<span class="f">sum</span>())                 <span class="c"># 0/1 합</span>
+<span class="f">print</span>(<span class="f">len</span>(df[df[<span class="s">'flag'</span>] == <span class="n">1</span>]))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t1answer-4" data-g="t1" data-hot="1" data-k="print answer 출력 최종 답 점검 출력">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">필수</span></div>
+    <h3 data-t="최종 답은 값 하나만">최종 답은 값 하나만</h3>
+    <p class="when">답을 입력하기 직전.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="최종 답은 값 하나만 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="최종 답은 값 하나만 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>cond = df[<span class="s">'group'</span>] == <span class="s">'G1'</span>
+<span class="f">print</span>(<span class="s">'G1 행 수:'</span>, cond.<span class="f">sum</span>())     <span class="c"># 점검용은 설명을 붙여 출력</span>
+
+answer = <span class="f">round</span>(df.loc[cond, <span class="s">'score'</span>].<span class="f">mean</span>(), <span class="n">2</span>)
+<span class="f">print</span>(answer)                      <span class="c"># 답안 칸에는 이 숫자만 입력</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t2prep" data-g="t2">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 2 <span>·</span> 06</p>
+    <h2>전처리</h2>
+    <p class="sec-desc">target·id 분리 → 결측 → 인코딩 → train 기준으로 컬럼 맞추기. 이 순서만 지키면 된다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t2prep-1" data-g="t2" data-hot="0" data-k="import train test sample_submission 불러오기">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">sklearn</span></div>
+    <h3 data-t="라이브러리 · 데이터 불러오기">라이브러리 · 데이터 불러오기</h3>
+    <p class="when">작업형 2 시작할 때 한 번에.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="라이브러리 · 데이터 불러오기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="라이브러리 · 데이터 불러오기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">import</span> pandas <span class="k">as</span> pd
+<span class="k">import</span> numpy <span class="k">as</span> np
+<span class="k">from</span> sklearn.model_selection <span class="k">import</span> train_test_split
+<span class="k">from</span> sklearn.ensemble <span class="k">import</span> RandomForestClassifier, RandomForestRegressor
+<span class="k">from</span> sklearn.metrics <span class="k">import</span> roc_auc_score, f1_score, accuracy_score
+<span class="k">from</span> sklearn.metrics <span class="k">import</span> mean_absolute_error, mean_squared_error, r2_score
+
+train = pd.<span class="f">read_csv</span>(<span class="s">'data/train.csv'</span>)
+test = pd.<span class="f">read_csv</span>(<span class="s">'data/test.csv'</span>)
+<span class="f">print</span>(train.shape, test.shape)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2prep-2" data-g="t2" data-hot="0" data-k="target 분류 회귀 이진 다중 value_counts nunique train에만 있는 컬럼">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">target</span></div>
+    <h3 data-t="target 찾기 · 분류인가 회귀인가">target 찾기 · 분류인가 회귀인가</h3>
+    <p class="when">모델을 고르기 전에. 지표와 제출값이 여기서 갈린다.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="target 찾기 · 분류인가 회귀인가 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="target 찾기 · 분류인가 회귀인가 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="c"># train 에만 있는 컬럼 = target 후보</span>
+<span class="f">print</span>(<span class="f">set</span>(train.columns) - <span class="f">set</span>(test.columns))
+<span class="f">print</span>(train[target_col].<span class="f">value_counts</span>().<span class="f">sort_index</span>())
+<span class="f">print</span>(train[target_col].<span class="f">nunique</span>())
+<span class="c"># 값 2개   → 이진분류 (ROC-AUC 면 확률 제출)</span>
+<span class="c"># 값 여러 개 → 다중분류 (Macro F1 · 클래스 제출)</span>
+<span class="c"># 연속값   → 회귀</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2prep-3" data-g="t2" data-hot="0" data-k="target 분리 id 제거 X y drop columns">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">drop</span></div>
+    <h3 data-t="X · y 분리 — id 는 뺀다">X · y 분리 — id 는 뺀다</h3>
+    <p class="when">target 과 id 를 입력에서 뺄 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="X · y 분리 — id 는 뺀다 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="X · y 분리 — id 는 뺀다 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X_raw = train.<span class="f">drop</span>(columns=[target_col, id_col]).<span class="f">copy</span>()
+y = train[target_col].<span class="f">copy</span>()
+test_raw = test.<span class="f">drop</span>(columns=[id_col]).<span class="f">copy</span>()
+<span class="f">print</span>(X_raw.shape, y.shape, test_raw.shape)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t2prep-4" data-g="t2" data-hot="1" data-k="fillna median unknown select_dtypes object 결측 train 기준">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">함정</span></div>
+    <h3 data-t="결측 채우기 — 기준은 train">결측 채우기 — 기준은 train</h3>
+    <p class="when">train·test 결측치를 같은 기준으로 채울 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="결측 채우기 — 기준은 train 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="결측 채우기 — 기준은 train 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>cat_cols = X_raw.<span class="f">select_dtypes</span>(include=<span class="s">'object'</span>).columns
+num_cols = X_raw.<span class="f">select_dtypes</span>(exclude=<span class="s">'object'</span>).columns
+
+<span class="k">for</span> col <span class="k">in</span> num_cols:
+    med = X_raw[col].<span class="f">median</span>()                    <span class="c"># train 에서 구한 값을</span>
+    X_raw[col] = X_raw[col].<span class="f">fillna</span>(med)
+    test_raw[col] = test_raw[col].<span class="f">fillna</span>(med)    <span class="c"># test 에도 그대로</span>
+<span class="k">for</span> col <span class="k">in</span> cat_cols:
+    X_raw[col] = X_raw[col].<span class="f">fillna</span>(<span class="s">'unknown'</span>)
+    test_raw[col] = test_raw[col].<span class="f">fillna</span>(<span class="s">'unknown'</span>)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t2prep-5" data-g="t2" data-hot="1" data-k="get_dummies reindex fill_value 컬럼 불일치 columns.equals 원핫">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">필수</span></div>
+    <h3 data-t="원-핫 인코딩 + 컬럼 맞추기">원-핫 인코딩 + 컬럼 맞추기</h3>
+    <p class="when">문자형 컬럼이 있을 때. test 컬럼을 train 에 맞춘다.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="원-핫 인코딩 + 컬럼 맞추기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="원-핫 인코딩 + 컬럼 맞추기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X_enc = pd.<span class="f">get_dummies</span>(X_raw)
+test_enc = pd.<span class="f">get_dummies</span>(test_raw)
+test_enc = test_enc.<span class="f">reindex</span>(columns=X_enc.columns, fill_value=<span class="n">0</span>)
+
+<span class="f">print</span>(X_enc.columns.<span class="f">equals</span>(test_enc.columns))   <span class="c"># True 여야 한다</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2prep-6" data-g="t2" data-hot="0" data-k="LabelEncoder 라벨 인코딩 범주형 숫자 변환 concat">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">LabelEncoder</span></div>
+    <h3 data-t="라벨 인코딩 (대안)">라벨 인코딩 (대안)</h3>
+    <p class="when">범주가 많아 원-핫이 너무 커질 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="라벨 인코딩 (대안) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="라벨 인코딩 (대안) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> sklearn.preprocessing <span class="k">import</span> LabelEncoder
+
+X_le, test_le = X_raw.<span class="f">copy</span>(), test_raw.<span class="f">copy</span>()
+<span class="k">for</span> col <span class="k">in</span> cat_cols:
+    le = <span class="f">LabelEncoder</span>()
+    le.<span class="f">fit</span>(pd.<span class="f">concat</span>([X_le[col], test_le[col]]))   <span class="c"># test 에만 있는 값 대비</span>
+    X_le[col] = le.<span class="f">transform</span>(X_le[col])
+    test_le[col] = le.<span class="f">transform</span>(test_le[col])</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2prep-7" data-g="t2" data-hot="0" data-k="prepare_features 함수 전처리 재사용 검증 최종">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">prepare_features</span></div>
+    <h3 data-t="전처리 함수로 묶기 (교재 패턴)">전처리 함수로 묶기 (교재 패턴)</h3>
+    <p class="when">검증용과 최종용에 같은 전처리를 두 번 할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="전처리 함수로 묶기 (교재 패턴) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="전처리 함수로 묶기 (교재 패턴) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">def</span> <span class="f">prepare_features</span>(ref_X, other_X):
+    ref_X, other_X = ref_X.<span class="f">copy</span>(), other_X.<span class="f">copy</span>()
+    cat = ref_X.<span class="f">select_dtypes</span>(include=<span class="s">'object'</span>).columns
+    num = ref_X.<span class="f">select_dtypes</span>(exclude=<span class="s">'object'</span>).columns
+    <span class="k">for</span> c <span class="k">in</span> num:
+        m = ref_X[c].<span class="f">median</span>()
+        ref_X[c] = ref_X[c].<span class="f">fillna</span>(m)
+        other_X[c] = other_X[c].<span class="f">fillna</span>(m)
+    <span class="k">for</span> c <span class="k">in</span> cat:
+        ref_X[c] = ref_X[c].<span class="f">fillna</span>(<span class="s">'unknown'</span>)
+        other_X[c] = other_X[c].<span class="f">fillna</span>(<span class="s">'unknown'</span>)
+    ref_X = pd.<span class="f">get_dummies</span>(ref_X)
+    other_X = pd.<span class="f">get_dummies</span>(other_X)
+    other_X = other_X.<span class="f">reindex</span>(columns=ref_X.columns, fill_value=<span class="n">0</span>)
+    <span class="k">return</span> ref_X, other_X
+
+X_raw = train.<span class="f">drop</span>(columns=[target_col, id_col])
+test_raw = test.<span class="f">drop</span>(columns=[id_col])</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2prep-8" data-g="t2" data-hot="0" data-k="StandardScaler MinMaxScaler 스케일링 fit_transform transform">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">StandardScaler</span></div>
+    <h3 data-t="스케일링 (필요할 때만)">스케일링 (필요할 때만)</h3>
+    <p class="when">로지스틱·선형 모델을 쓸 때. 트리 모델엔 불필요.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="스케일링 (필요할 때만) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="스케일링 (필요할 때만) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> sklearn.preprocessing <span class="k">import</span> StandardScaler
+
+X_enc, test_enc = <span class="f">prepare_features</span>(X_raw, test_raw)
+sc = <span class="f">StandardScaler</span>()
+X_sc = sc.<span class="f">fit_transform</span>(X_enc)      <span class="c"># train 은 fit_transform</span>
+test_sc = sc.<span class="f">transform</span>(test_enc)    <span class="c"># test 는 transform 만</span>
+<span class="c"># 트리 모델(RandomForest)은 스케일링 없이도 된다</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t2model" data-g="t2">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 2 <span>·</span> 07</p>
+    <h2>모델 · 검증</h2>
+    <p class="sec-desc">검증으로 점수를 보고, 전체 train 으로 다시 학습해 test 를 예측한다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t2model-1" data-g="t2" data-hot="0" data-k="train_test_split stratify test_size random_state 검증">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">train_test_split</span></div>
+    <h3 data-t="검증 데이터 나누기">검증 데이터 나누기</h3>
+    <p class="when">제출 전에 내 모델 점수를 확인할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="검증 데이터 나누기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="검증 데이터 나누기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X_tr_raw, X_va_raw, y_tr, y_va = <span class="f">train_test_split</span>(
+    X_raw, y, test_size=<span class="n">0.2</span>, random_state=<span class="n">0</span>,
+    stratify=y)              <span class="c"># 분류면 stratify, 회귀면 빼기</span>
+X_tr, X_va = <span class="f">prepare_features</span>(X_tr_raw, X_va_raw)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2model-2" data-g="t2" data-hot="0" data-k="RandomForestClassifier 분류 fit predict n_estimators">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">RandomForest</span></div>
+    <h3 data-t="분류 모델">분류 모델</h3>
+    <p class="when">이진·다중분류 기본 모델.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="분류 모델 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="분류 모델 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>model = <span class="f">RandomForestClassifier</span>(n_estimators=<span class="n">200</span>, random_state=<span class="n">0</span>)
+model.<span class="f">fit</span>(X_tr, y_tr)
+pred = model.<span class="f">predict</span>(X_va)
+<span class="f">print</span>(<span class="f">accuracy_score</span>(y_va, pred))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t2model-3" data-g="t2" data-hot="1" data-k="predict_proba classes_ 양성 확률 positive_index roc_auc 이진분류">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">함정</span></div>
+    <h3 data-t="양성 확률 꺼내기">양성 확률 꺼내기</h3>
+    <p class="when">평가지표가 ROC-AUC 일 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="양성 확률 꺼내기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="양성 확률 꺼내기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>proba = model.<span class="f">predict_proba</span>(X_va)            <span class="c"># (행, 클래스 수)</span>
+pos = <span class="f">list</span>(model.classes_).<span class="f">index</span>(<span class="n">1</span>)           <span class="c"># 라벨 1 의 열 위치</span>
+p1 = proba[:, pos]
+<span class="f">print</span>(<span class="f">roc_auc_score</span>(y_va, p1))                <span class="c"># ROC-AUC 는 확률로</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2model-4" data-g="t2" data-hot="0" data-k="f1 macro accuracy precision recall roc_auc 평가지표 분류">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">metrics</span></div>
+    <h3 data-t="분류 평가지표">분류 평가지표</h3>
+    <p class="when">검증 점수 확인. 다중분류는 average 지정.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="분류 평가지표 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="분류 평가지표 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> sklearn.metrics <span class="k">import</span> precision_score, recall_score
+
+<span class="f">accuracy_score</span>(y_va, pred)
+<span class="f">f1_score</span>(y_va, pred)                    <span class="c"># 이진</span>
+<span class="f">f1_score</span>(y_va, pred, average=<span class="s">'macro'</span>)   <span class="c"># 다중분류 Macro F1</span>
+<span class="f">precision_score</span>(y_va, pred); <span class="f">recall_score</span>(y_va, pred)
+<span class="f">roc_auc_score</span>(y_va, p1)                 <span class="c"># 확률값 넣기</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2model-5" data-g="t2" data-hot="0" data-k="RandomForestRegressor 회귀 fit predict">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">RandomForest</span></div>
+    <h3 data-t="회귀 모델">회귀 모델</h3>
+    <p class="when">target 이 연속값일 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="회귀 모델 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="회귀 모델 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>Xr_tr_raw, Xr_va_raw, yr_tr, yr_va = <span class="f">train_test_split</span>(
+    X_raw, yr, test_size=<span class="n">0.2</span>, random_state=<span class="n">0</span>)
+Xr_tr, Xr_va = <span class="f">prepare_features</span>(Xr_tr_raw, Xr_va_raw)
+
+reg = <span class="f">RandomForestRegressor</span>(n_estimators=<span class="n">200</span>, random_state=<span class="n">0</span>)
+reg.<span class="f">fit</span>(Xr_tr, yr_tr)
+r_pred = reg.<span class="f">predict</span>(Xr_va)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2model-6" data-g="t2" data-hot="0" data-k="MAE MSE RMSE RMSLE R2 결정계수 회귀 평가지표 sqrt">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">metrics</span></div>
+    <h3 data-t="회귀 평가지표">회귀 평가지표</h3>
+    <p class="when">지표가 MAE·RMSE·RMSLE·R² 일 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="회귀 평가지표 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="회귀 평가지표 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> sklearn.metrics <span class="k">import</span> mean_squared_log_error
+
+mae = <span class="f">mean_absolute_error</span>(yr_va, r_pred)
+mse = <span class="f">mean_squared_error</span>(yr_va, r_pred)
+rmse = np.<span class="f">sqrt</span>(mse)                                      <span class="c"># RMSE</span>
+rmsle = np.<span class="f">sqrt</span>(<span class="f">mean_squared_log_error</span>(yr_va, r_pred))   <span class="c"># 음수가 있으면 오류</span>
+r2 = <span class="f">r2_score</span>(yr_va, r_pred)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2model-7" data-g="t2" data-hot="0" data-k="LogisticRegression DecisionTree GradientBoosting LinearRegression 모델 교체">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">sklearn</span></div>
+    <h3 data-t="다른 모델로 바꿔 보기">다른 모델로 바꿔 보기</h3>
+    <p class="when">점수가 낮거나 모델이 지정됐을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="다른 모델로 바꿔 보기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="다른 모델로 바꿔 보기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> sklearn.linear_model <span class="k">import</span> LogisticRegression, LinearRegression
+<span class="k">from</span> sklearn.tree <span class="k">import</span> DecisionTreeClassifier
+<span class="k">from</span> sklearn.ensemble <span class="k">import</span> GradientBoostingClassifier
+
+<span class="f">LogisticRegression</span>(max_iter=<span class="n">1000</span>).<span class="f">fit</span>(X_tr, y_tr)
+<span class="f">DecisionTreeClassifier</span>(max_depth=<span class="n">5</span>, random_state=<span class="n">0</span>).<span class="f">fit</span>(X_tr, y_tr)
+<span class="f">GradientBoostingClassifier</span>(random_state=<span class="n">0</span>).<span class="f">fit</span>(X_tr, y_tr)
+<span class="f">LinearRegression</span>().<span class="f">fit</span>(Xr_tr, yr_tr)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2model-8" data-g="t2" data-hot="0" data-k="최종 학습 전체 train 재학습 test 예측">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">fit</span></div>
+    <h3 data-t="최종 학습 — 전체 train 으로">최종 학습 — 전체 train 으로</h3>
+    <p class="when">검증을 마치고 test 를 예측할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="최종 학습 — 전체 train 으로 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="최종 학습 — 전체 train 으로 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X_full, test_enc = <span class="f">prepare_features</span>(X_raw, test_raw)
+final = <span class="f">RandomForestClassifier</span>(n_estimators=<span class="n">200</span>, random_state=<span class="n">0</span>)
+final.<span class="f">fit</span>(X_full, y)
+
+pos = <span class="f">list</span>(final.classes_).<span class="f">index</span>(<span class="n">1</span>)
+test_pred = final.<span class="f">predict_proba</span>(test_enc)[:, pos]   <span class="c"># 확률 제출</span>
+<span class="c"># test_pred = final.predict(test_enc)              # 클래스 제출</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t2submit" data-g="t2">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 2 <span>·</span> 08</p>
+    <h2>제출 파일</h2>
+    <p class="sec-desc">파일이 틀리면 모델이 아무리 좋아도 0점이다. 저장하고 다시 읽어서 확인한다.</p>
+  </header>
+  <div class="rows">
+<article class="snip is-hot" id="t2submit-1" data-g="t2" data-hot="1" data-k="result.csv to_csv index=False pred 제출 sample_submission">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">필수</span></div>
+    <h3 data-t="result.csv 만들기">result.csv 만들기</h3>
+    <p class="when">예측값을 제출 파일로 저장할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="result.csv 만들기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="result.csv 만들기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>result = pd.<span class="f">DataFrame</span>({<span class="s">'pred'</span>: test_pred})
+<span class="c"># sample_submission 이 주어지면 복사해서 채운다</span>
+<span class="c"># result = sample.copy(); result['pred'] = test_pred</span>
+result.<span class="f">to_csv</span>(<span class="s">'result.csv'</span>, index=<span class="k">False</span>)   <span class="c"># index=False 필수</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2submit-2" data-g="t2" data-hot="0" data-k="제출 확인 read_csv shape columns 결측 행 수 검증">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">검증</span></div>
+    <h3 data-t="저장한 파일 다시 읽어 확인">저장한 파일 다시 읽어 확인</h3>
+    <p class="when">제출 직전 마지막 점검.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="저장한 파일 다시 읽어 확인 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="저장한 파일 다시 읽어 확인 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>check = pd.<span class="f">read_csv</span>(<span class="s">'result.csv'</span>)
+<span class="f">print</span>(check.shape)                     <span class="c"># (test 행 수, 1)</span>
+<span class="f">print</span>(check.columns.<span class="f">tolist</span>())          <span class="c"># ['pred']</span>
+<span class="f">print</span>(<span class="f">len</span>(check) == <span class="f">len</span>(test))         <span class="c"># True</span>
+<span class="f">print</span>(check.<span class="f">isna</span>().<span class="f">sum</span>().<span class="f">sum</span>())        <span class="c"># 0</span>
+<span class="f">print</span>(check.<span class="f">head</span>())</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t2submit-3" data-g="t2" data-hot="0" data-k="확률 클래스 회귀 범위 min max value_counts 점검">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pred</span></div>
+    <h3 data-t="제출값 형태 점검">제출값 형태 점검</h3>
+    <p class="when">확률·클래스·회귀값이 맞는 형태인지.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="제출값 형태 점검 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="제출값 형태 점검 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="f">print</span>(check[<span class="s">'pred'</span>].<span class="f">min</span>(), check[<span class="s">'pred'</span>].<span class="f">max</span>())  <span class="c"># 확률이면 0~1</span>
+<span class="f">print</span>(check[<span class="s">'pred'</span>].<span class="f">value_counts</span>().<span class="f">head</span>())        <span class="c"># 클래스면 분포 확인</span>
+<span class="c"># target 이 양수뿐인 회귀면 음수 예측이 없는지도 본다</span>
+<span class="f">print</span>((check[<span class="s">'pred'</span>] &lt; <span class="n">0</span>).<span class="f">sum</span>())</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t3test" data-g="t3">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 3 <span>·</span> 09</p>
+    <h2>t-검정 · 비율 검정</h2>
+    <p class="sec-desc">함수보다 「방향(alternative)」과 「무엇 − 무엇」을 먼저 정한다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t3test-1" data-g="t3" data-hot="0" data-k="scipy stats statsmodels import ols proportions_ztest">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">scipy</span></div>
+    <h3 data-t="라이브러리">라이브러리</h3>
+    <p class="when">작업형 3 시작할 때 한 번에.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="라이브러리 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="라이브러리 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> scipy <span class="k">import</span> stats
+<span class="k">import</span> statsmodels.api <span class="k">as</span> sm
+<span class="k">from</span> statsmodels.formula.api <span class="k">import</span> ols
+<span class="k">from</span> statsmodels.stats.proportion <span class="k">import</span> proportions_ztest</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-2" data-g="t3" data-hot="0" data-k="ttest_1samp 단일표본 기준값 평균 t검정">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">ttest_1samp</span></div>
+    <h3 data-t="단일표본 t-검정">단일표본 t-검정</h3>
+    <p class="when">평균이 기준값과 다른지.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="단일표본 t-검정 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="단일표본 t-검정 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>r = stats.<span class="f">ttest_1samp</span>(df[<span class="s">'x'</span>], <span class="n">50</span>, alternative=<span class="s">'two-sided'</span>)
+<span class="f">print</span>(<span class="f">round</span>(r.statistic, <span class="n">4</span>), <span class="f">round</span>(r.pvalue, <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t3test-3" data-g="t3" data-hot="1" data-k="alternative two-sided greater less 단측 양측 방향 크다 작다">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">함정</span></div>
+    <h3 data-t="검정 방향 alternative">검정 방향 alternative</h3>
+    <p class="when">「크다」 「작다」가 문제에 나올 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="검정 방향 alternative 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="검정 방향 alternative 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="c"># 대립가설 「평균이 50 보다 크다」 → greater</span>
+stats.<span class="f">ttest_1samp</span>(df[<span class="s">'x'</span>], <span class="n">50</span>, alternative=<span class="s">'greater'</span>)
+<span class="c"># 「작다」 → less,  「다르다」 → two-sided (기본값)</span>
+<span class="c"># 두 표본이면 「첫 번째 인자 − 두 번째 인자」 기준</span>
+stats.<span class="f">ttest_ind</span>(a, b, alternative=<span class="s">'less'</span>)     <span class="c"># a 평균 &lt; b 평균</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-4" data-g="t3" data-hot="0" data-k="shapiro 정규성 levene 등분산 bartlett 검정">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">shapiro</span></div>
+    <h3 data-t="정규성 · 등분산 검정">정규성 · 등분산 검정</h3>
+    <p class="when">t-검정 전에 가정을 확인하라고 할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="정규성 · 등분산 검정 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="정규성 · 등분산 검정 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="f">print</span>(stats.<span class="f">shapiro</span>(a).pvalue)          <span class="c"># p ≥ 0.05 → 정규성 만족</span>
+<span class="f">print</span>(stats.<span class="f">levene</span>(a, b).pvalue)        <span class="c"># p ≥ 0.05 → 등분산</span>
+<span class="f">print</span>(stats.<span class="f">bartlett</span>(a, b).pvalue)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-5" data-g="t3" data-hot="0" data-k="ttest_ind 독립표본 equal_var 등분산 welch 두 집단">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">ttest_ind</span></div>
+    <h3 data-t="독립표본 t-검정">독립표본 t-검정</h3>
+    <p class="when">서로 다른 두 집단의 평균 비교.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="독립표본 t-검정 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="독립표본 t-검정 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>lev_p = stats.<span class="f">levene</span>(a, b).pvalue
+r = stats.<span class="f">ttest_ind</span>(a, b, equal_var=(lev_p &gt;= <span class="n">0.05</span>))   <span class="c"># 등분산 아니면 Welch</span>
+<span class="f">print</span>(<span class="f">round</span>(r.statistic, <span class="n">4</span>), <span class="f">round</span>(r.pvalue, <span class="n">4</span>))
+<span class="f">print</span>(<span class="f">round</span>(a.<span class="f">mean</span>() - b.<span class="f">mean</span>(), <span class="n">4</span>))     <span class="c"># 평균 차이 방향 확인</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-6" data-g="t3" data-hot="0" data-k="ttest_rel 대응표본 전후 before after 차이">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">ttest_rel</span></div>
+    <h3 data-t="대응표본 t-검정">대응표본 t-검정</h3>
+    <p class="when">같은 대상의 전·후 비교.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="대응표본 t-검정 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="대응표본 t-검정 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="c"># 「사후 − 사전」 순서로 넣는다</span>
+r = stats.<span class="f">ttest_rel</span>(df[<span class="s">'after'</span>], df[<span class="s">'before'</span>], alternative=<span class="s">'greater'</span>)
+<span class="f">print</span>(<span class="f">round</span>(r.statistic, <span class="n">4</span>), <span class="f">round</span>(r.pvalue, <span class="n">4</span>))
+<span class="f">print</span>(<span class="f">round</span>((df[<span class="s">'after'</span>] - df[<span class="s">'before'</span>]).<span class="f">mean</span>(), <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-7" data-g="t3" data-hot="0" data-k="신뢰구간 confidence_interval t.interval 95%">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">confidence_interval</span></div>
+    <h3 data-t="신뢰구간">신뢰구간</h3>
+    <p class="when">「95% 신뢰구간 하한·상한」을 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="신뢰구간 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="신뢰구간 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>r = stats.<span class="f">ttest_1samp</span>(df[<span class="s">'x'</span>], <span class="n">50</span>)
+ci = r.<span class="f">confidence_interval</span>(confidence_level=<span class="n">0.95</span>)
+<span class="f">print</span>(<span class="f">round</span>(ci.low, <span class="n">4</span>), <span class="f">round</span>(ci.high, <span class="n">4</span>))
+
+se = stats.<span class="f">sem</span>(df[<span class="s">'x'</span>])
+stats.t.<span class="f">interval</span>(<span class="n">0.95</span>, <span class="f">len</span>(df) - <span class="n">1</span>, loc=df[<span class="s">'x'</span>].<span class="f">mean</span>(), scale=se)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-8" data-g="t3" data-hot="0" data-k="검정통계량 직접 계산 표준오차 공식 t값">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">t</span></div>
+    <h3 data-t="검정통계량 직접 계산">검정통계량 직접 계산</h3>
+    <p class="when">공식으로 직접 구하라고 할 때, 함수 결과 확인할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="검정통계량 직접 계산 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="검정통계량 직접 계산 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>n = <span class="f">len</span>(df); m = df[<span class="s">'x'</span>].<span class="f">mean</span>(); s = df[<span class="s">'x'</span>].<span class="f">std</span>()
+t = (m - <span class="n">50</span>) / (s / np.<span class="f">sqrt</span>(n))
+p = <span class="n">2</span> * (<span class="n">1</span> - stats.t.<span class="f">cdf</span>(<span class="f">abs</span>(t), df=n - <span class="n">1</span>))   <span class="c"># 양측</span>
+<span class="f">print</span>(<span class="f">round</span>(t, <span class="n">4</span>), <span class="f">round</span>(p, <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3test-9" data-g="t3" data-hot="0" data-k="비율 검정 proportions_ztest 성공 수 nobs value z검정">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">proportions_ztest</span></div>
+    <h3 data-t="비율 검정 (1표본 · 2표본)">비율 검정 (1표본 · 2표본)</h3>
+    <p class="when">「비율이 p 와 다른가」 「두 집단 비율 차이」.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="비율 검정 (1표본 · 2표본) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="비율 검정 (1표본 · 2표본) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>cnt, nobs = df[<span class="s">'success'</span>].<span class="f">sum</span>(), <span class="f">len</span>(df)
+z, p = <span class="f">proportions_ztest</span>(count=cnt, nobs=nobs, value=<span class="n">0.5</span>)     <span class="c"># 1표본</span>
+
+s = df.<span class="f">groupby</span>(<span class="s">'cat'</span>)[<span class="s">'success'</span>].<span class="f">agg</span>([<span class="s">'sum'</span>, <span class="s">'count'</span>])
+z2, p2 = <span class="f">proportions_ztest</span>(count=s[<span class="s">'sum'</span>].values,
+                           nobs=s[<span class="s">'count'</span>].values)             <span class="c"># 2표본</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t3anova" data-g="t3">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 3 <span>·</span> 10</p>
+    <h2>분산분석 · 카이제곱</h2>
+    <p class="sec-desc">세 집단 이상의 평균은 ANOVA, 범주끼리의 관계는 카이제곱.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t3anova-1" data-g="t3" data-hot="0" data-k="f_oneway 일원분산분석 ANOVA 세 집단 F">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">f_oneway</span></div>
+    <h3 data-t="일원분산분석 (scipy)">일원분산분석 (scipy)</h3>
+    <p class="when">세 집단 이상의 평균 비교.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="일원분산분석 (scipy) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="일원분산분석 (scipy) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>groups = [g[<span class="s">'x'</span>].values <span class="k">for</span> _, g <span class="k">in</span> df.<span class="f">groupby</span>(<span class="s">'group'</span>)]
+r = stats.<span class="f">f_oneway</span>(*groups)
+<span class="f">print</span>(<span class="f">round</span>(r.statistic, <span class="n">4</span>), <span class="f">round</span>(r.pvalue, <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3anova-2" data-g="t3" data-hot="0" data-k="ols anova_lm 분산분석표 C() 이원 typ formula">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">anova_lm</span></div>
+    <h3 data-t="분산분석표 (statsmodels)">분산분석표 (statsmodels)</h3>
+    <p class="when">분산분석표의 F·p 값, 이원분산분석.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="분산분석표 (statsmodels) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="분산분석표 (statsmodels) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>model = <span class="f">ols</span>(<span class="s">'x ~ C(group)'</span>, data=df).<span class="f">fit</span>()
+<span class="f">print</span>(sm.stats.<span class="f">anova_lm</span>(model, typ=<span class="n">2</span>))
+
+<span class="c"># 이원분산분석 (교호작용 포함)</span>
+m2 = <span class="f">ols</span>(<span class="s">'x ~ C(group) * C(cat)'</span>, data=df).<span class="f">fit</span>()
+<span class="f">print</span>(sm.stats.<span class="f">anova_lm</span>(m2, typ=<span class="n">2</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3anova-3" data-g="t3" data-hot="0" data-k="tukey pairwise_tukeyhsd 사후검정 다중비교">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">tukeyhsd</span></div>
+    <h3 data-t="사후검정 (Tukey)">사후검정 (Tukey)</h3>
+    <p class="when">ANOVA 뒤 「어느 집단끼리 다른가」.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="사후검정 (Tukey) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="사후검정 (Tukey) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> statsmodels.stats.multicomp <span class="k">import</span> pairwise_tukeyhsd
+
+res = <span class="f">pairwise_tukeyhsd</span>(df[<span class="s">'x'</span>], df[<span class="s">'group'</span>], alpha=<span class="n">0.05</span>)
+<span class="f">print</span>(res)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3anova-4" data-g="t3" data-hot="0" data-k="chisquare 적합도 기대비율 관측도수 기대도수">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">chisquare</span></div>
+    <h3 data-t="카이제곱 적합도">카이제곱 적합도</h3>
+    <p class="when">관측 분포가 기대 비율과 같은지.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="카이제곱 적합도 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="카이제곱 적합도 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>obs = df[<span class="s">'grade'</span>].<span class="f">value_counts</span>().<span class="f">sort_index</span>()      <span class="c"># A B C D</span>
+exp_ratio = np.<span class="f">array</span>([<span class="n">0.1</span>, <span class="n">0.2</span>, <span class="n">0.3</span>, <span class="n">0.4</span>])
+r = stats.<span class="f">chisquare</span>(obs, f_exp=exp_ratio * obs.<span class="f">sum</span>())   <span class="c"># 합이 같아야 한다</span>
+<span class="f">print</span>(<span class="f">round</span>(r.statistic, <span class="n">4</span>), <span class="f">round</span>(r.pvalue, <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3anova-5" data-g="t3" data-hot="0" data-k="chi2_contingency 독립성 crosstab 교차표 기대도수 자유도">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">chi2_contingency</span></div>
+    <h3 data-t="카이제곱 독립성">카이제곱 독립성</h3>
+    <p class="when">두 범주형 변수가 서로 관계있는지.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="카이제곱 독립성 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="카이제곱 독립성 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>table = pd.<span class="f">crosstab</span>(df[<span class="s">'region'</span>], df[<span class="s">'cat'</span>])
+chi2, p, dof, expected = stats.<span class="f">chi2_contingency</span>(table)
+<span class="f">print</span>(<span class="f">round</span>(chi2, <span class="n">4</span>), <span class="f">round</span>(p, <span class="n">4</span>), dof)
+<span class="f">print</span>(np.<span class="f">round</span>(expected, <span class="n">2</span>))
+<span class="c"># 2×2 표는 기본이 연속성 보정 — 보정 없이: correction=False</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3anova-6" data-g="t3" data-hot="0" data-k="p-value 유의수준 기각 채택 귀무가설 0.05">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">p-value</span></div>
+    <h3 data-t="가설 기각 판단">가설 기각 판단</h3>
+    <p class="when">「기각/채택」을 답으로 고를 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="가설 기각 판단 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="가설 기각 판단 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>alpha = <span class="n">0.05</span>
+p = r.pvalue
+<span class="f">print</span>(<span class="s">'기각'</span> <span class="k">if</span> p &lt; alpha <span class="k">else</span> <span class="s">'채택'</span>)
+<span class="c"># p &lt; α → 귀무가설 기각 (차이·관계가 있다)</span>
+<span class="c"># p ≥ α → 귀무가설 채택 (기각하지 못한다)</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t3reg" data-g="t3">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 3 <span>·</span> 11</p>
+    <h2>상관 · 회귀</h2>
+    <p class="sec-desc">statsmodels 결과에서 필요한 값 하나만 꺼내는 게 실력이다. summary 전체를 외울 필요는 없다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t3reg-1" data-g="t3" data-hot="0" data-k="pearsonr spearmanr 상관분석 상관계수 p-value">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pearsonr</span></div>
+    <h3 data-t="상관분석">상관분석</h3>
+    <p class="when">두 수치형 변수의 상관계수와 유의성.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="상관분석 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="상관분석 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>r = stats.<span class="f">pearsonr</span>(df[<span class="s">'x'</span>], df[<span class="s">'y'</span>])
+<span class="f">print</span>(<span class="f">round</span>(r.statistic, <span class="n">4</span>), <span class="f">round</span>(r.pvalue, <span class="n">4</span>))
+s = stats.<span class="f">spearmanr</span>(df[<span class="s">'x'</span>], df[<span class="s">'y'</span>])
+<span class="f">print</span>(<span class="f">round</span>(s.statistic, <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3reg-2" data-g="t3" data-hot="0" data-k="OLS add_constant 상수항 회귀분석 선형회귀 statsmodels fit">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">sm.OLS</span></div>
+    <h3 data-t="선형회귀 OLS">선형회귀 OLS</h3>
+    <p class="when">회귀계수·결정계수·p-value 를 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="선형회귀 OLS 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="선형회귀 OLS 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X = sm.<span class="f">add_constant</span>(df[[<span class="s">'x'</span>, <span class="s">'x2'</span>]])     <span class="c"># 상수항 꼭 추가</span>
+model = sm.<span class="f">OLS</span>(df[<span class="s">'y'</span>], X).<span class="f">fit</span>()
+<span class="f">print</span>(model.<span class="f">summary</span>())</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t3reg-3" data-g="t3" data-hot="1" data-k="params pvalues rsquared rsquared_adj fvalue f_pvalue 회귀계수 결정계수">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">빈출</span></div>
+    <h3 data-t="회귀 결과에서 값 꺼내기">회귀 결과에서 값 꺼내기</h3>
+    <p class="when">summary 에서 특정 숫자 하나가 필요할 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="회귀 결과에서 값 꺼내기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="회귀 결과에서 값 꺼내기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>model.params[<span class="s">'x'</span>]          <span class="c"># 회귀계수</span>
+model.pvalues[<span class="s">'x'</span>]         <span class="c"># 계수 p-value</span>
+model.rsquared             <span class="c"># 결정계수 R²</span>
+model.rsquared_adj         <span class="c"># 수정된 R²</span>
+model.fvalue, model.f_pvalue
+model.tvalues[<span class="s">'x'</span>]
+model.params.<span class="f">drop</span>(<span class="s">'const'</span>).<span class="f">abs</span>().<span class="f">idxmax</span>()   <span class="c"># 계수 절댓값이 가장 큰 변수</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3reg-4" data-g="t3" data-hot="0" data-k="ols formula C() 범주형 회귀 더미">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">ols</span></div>
+    <h3 data-t="formula 로 회귀 (범주형 포함)">formula 로 회귀 (범주형 포함)</h3>
+    <p class="when">범주형 독립변수가 섞여 있을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="formula 로 회귀 (범주형 포함) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="formula 로 회귀 (범주형 포함) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>m = <span class="f">ols</span>(<span class="s">'y ~ x + x2 + C(region)'</span>, data=df).<span class="f">fit</span>()
+<span class="f">print</span>(m.params)
+<span class="f">print</span>(m.rsquared)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3reg-5" data-g="t3" data-hot="0" data-k="conf_int 신뢰구간 predict get_prediction summary_frame 예측구간">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">conf_int</span></div>
+    <h3 data-t="신뢰구간 · 예측">신뢰구간 · 예측</h3>
+    <p class="when">계수 신뢰구간, 새 값에 대한 예측값.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="신뢰구간 · 예측 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="신뢰구간 · 예측 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="f">print</span>(model.<span class="f">conf_int</span>(alpha=<span class="n">0.05</span>).loc[<span class="s">'x'</span>])     <span class="c"># 계수 95% 신뢰구간</span>
+
+new = pd.<span class="f">DataFrame</span>({<span class="s">'x'</span>: [<span class="n">55.0</span>], <span class="s">'x2'</span>: [<span class="n">1</span>]})
+new_X = sm.<span class="f">add_constant</span>(new, has_constant=<span class="s">'add'</span>)[model.params.index]
+<span class="f">print</span>(model.<span class="f">predict</span>(new_X).iloc[<span class="n">0</span>])
+<span class="f">print</span>(model.<span class="f">get_prediction</span>(new_X).<span class="f">summary_frame</span>(alpha=<span class="n">0.05</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3reg-6" data-g="t3" data-hot="0" data-k="유의 변수 선택 재적합 pvalues 0.05 변수 선별">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">pvalues</span></div>
+    <h3 data-t="유의한 변수만 다시 적합">유의한 변수만 다시 적합</h3>
+    <p class="when">「유의한 변수만으로 다시 적합」 지시가 있을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="유의한 변수만 다시 적합 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="유의한 변수만 다시 적합 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X0 = sm.<span class="f">add_constant</span>(df[[<span class="s">'x'</span>, <span class="s">'x2'</span>, <span class="s">'x3'</span>]])
+m0 = sm.<span class="f">OLS</span>(df[<span class="s">'y'</span>], X0).<span class="f">fit</span>()
+sig = m0.pvalues.<span class="f">drop</span>(<span class="s">'const'</span>)
+cols = sig[sig &lt; <span class="n">0.05</span>].index.<span class="f">tolist</span>()
+
+m1 = sm.<span class="f">OLS</span>(df[<span class="s">'y'</span>], sm.<span class="f">add_constant</span>(df[cols], has_constant=<span class="s">'add'</span>)).<span class="f">fit</span>()
+<span class="f">print</span>(cols, <span class="f">round</span>(m1.rsquared, <span class="n">4</span>))</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3reg-7" data-g="t3" data-hot="0" data-k="get_dummies drop_first dtype int 더미 기준범주">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">get_dummies</span></div>
+    <h3 data-t="더미 변수 만들기">더미 변수 만들기</h3>
+    <p class="when">범주형을 회귀에 넣을 때. 기준 범주 하나를 뺀다.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="더미 변수 만들기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="더미 변수 만들기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X = pd.<span class="f">get_dummies</span>(df[[<span class="s">'x'</span>, <span class="s">'region'</span>]], columns=[<span class="s">'region'</span>],
+                   drop_first=<span class="k">True</span>, dtype=int)   <span class="c"># bool 말고 int</span>
+X = sm.<span class="f">add_constant</span>(X)
+sm.<span class="f">OLS</span>(df[<span class="s">'y'</span>], X).<span class="f">fit</span>().params</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="t3logit" data-g="t3">
+  <header class="sec-head">
+    <p class="eyebrow">작업형 3 <span>·</span> 12</p>
+    <h2>로지스틱 회귀</h2>
+    <p class="sec-desc">계수 → exp → 오즈비. 문제에 따로 말이 없으면 「규제 없이」 푼다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="t3logit-1" data-g="t3" data-hot="0" data-k="Logit 로지스틱 회귀 disp add_constant statsmodels">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">sm.Logit</span></div>
+    <h3 data-t="로지스틱 회귀 (statsmodels)">로지스틱 회귀 (statsmodels)</h3>
+    <p class="when">target 이 0/1 인 회귀분석.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="로지스틱 회귀 (statsmodels) 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="로지스틱 회귀 (statsmodels) 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>X = sm.<span class="f">add_constant</span>(df[[<span class="s">'x'</span>, <span class="s">'x2'</span>]])
+logit = sm.<span class="f">Logit</span>(df[<span class="s">'label'</span>], X).<span class="f">fit</span>(disp=<span class="k">False</span>)  <span class="c"># 반복 로그 숨김</span>
+<span class="f">print</span>(logit.params)
+<span class="f">print</span>(logit.pvalues)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t3logit-2" data-g="t3" data-hot="1" data-k="오즈비 odds ratio exp np.exp 계수 n단위">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">빈출</span></div>
+    <h3 data-t="오즈비">오즈비</h3>
+    <p class="when">「오즈비」 「몇 배」를 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="오즈비 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="오즈비 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>odds = np.<span class="f">exp</span>(logit.params)
+<span class="f">print</span>(<span class="f">round</span>(odds[<span class="s">'x'</span>], <span class="n">4</span>))                        <span class="c"># x 1 증가 시 오즈비</span>
+<span class="f">print</span>(<span class="f">round</span>(np.<span class="f">exp</span>(logit.params[<span class="s">'x'</span>] * <span class="n">5</span>), <span class="n">4</span>))    <span class="c"># x 5 증가 시</span>
+<span class="f">print</span>(np.<span class="f">exp</span>(logit.<span class="f">conf_int</span>()).loc[<span class="s">'x'</span>])          <span class="c"># 오즈비 신뢰구간</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="t3logit-3" data-g="t3" data-hot="0" data-k="predict 확률 0.5 오분류율 정확도 분류 prsquared aic">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">predict</span></div>
+    <h3 data-t="예측 확률 · 오분류율">예측 확률 · 오분류율</h3>
+    <p class="when">확률·오분류율·의사 R² 를 물을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="예측 확률 · 오분류율 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="예측 확률 · 오분류율 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>prob = logit.<span class="f">predict</span>(X)                 <span class="c"># label=1 일 확률</span>
+pred = (prob &gt;= <span class="n">0.5</span>).<span class="f">astype</span>(int)
+err = (pred != df[<span class="s">'label'</span>]).<span class="f">mean</span>()       <span class="c"># 오분류율</span>
+<span class="f">print</span>(<span class="f">round</span>(err, <span class="n">4</span>), <span class="f">round</span>(<span class="n">1</span> - err, <span class="n">4</span>))
+<span class="f">print</span>(<span class="f">round</span>(logit.prsquared, <span class="n">4</span>))         <span class="c"># 의사 R²</span>
+<span class="f">print</span>(<span class="f">round</span>(logit.llf, <span class="n">4</span>), <span class="f">round</span>(logit.aic, <span class="n">4</span>))   <span class="c"># 로그우도 · AIC</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip is-hot" id="t3logit-4" data-g="t3" data-hot="1" data-k="LogisticRegression penalty None 규제 sklearn 계수 같은 값">
+  <div class="meta">
+    <div class="meta-top"><span class="flag">함정</span></div>
+    <h3 data-t="sklearn 으로 같은 값 내기">sklearn 으로 같은 값 내기</h3>
+    <p class="when">sklearn 로 풀었는데 계수가 다르게 나올 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="sklearn 으로 같은 값 내기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="sklearn 으로 같은 값 내기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">from</span> sklearn.linear_model <span class="k">import</span> LogisticRegression
+
+lr = <span class="f">LogisticRegression</span>(penalty=<span class="k">None</span>, max_iter=<span class="n">1000</span>)   <span class="c"># 규제 없이</span>
+<span class="c"># (sklearn 1.2 미만이면 penalty='none' 문자열)</span>
+lr.<span class="f">fit</span>(df[[<span class="s">'x'</span>, <span class="s">'x2'</span>]], df[<span class="s">'label'</span>])
+<span class="f">print</span>(lr.intercept_, lr.coef_)   <span class="c"># statsmodels Logit 과 같은 값</span>
+<span class="c"># 기본값(penalty='l2') 그대로면 계수가 달라진다</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+<section id="env" data-g="env">
+  <header class="sec-head">
+    <p class="eyebrow">시험장 <span>·</span> 13</p>
+    <h2>시험장에서</h2>
+    <p class="sec-desc">인터넷이 안 된다. 함수가 기억나지 않으면 dir 과 help 로 찾는다.</p>
+  </header>
+  <div class="rows">
+<article class="snip" id="env-1" data-g="env" data-hot="0" data-k="help dir 도움말 함수 찾기 인자 시험장">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">help</span></div>
+    <h3 data-t="함수 이름 · 인자 찾기">함수 이름 · 인자 찾기</h3>
+    <p class="when">함수 이름이나 인자가 기억나지 않을 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="함수 이름 · 인자 찾기 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="함수 이름 · 인자 찾기 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">import</span> sklearn.metrics
+<span class="f">print</span>([m <span class="k">for</span> m <span class="k">in</span> <span class="f">dir</span>(sklearn.metrics) <span class="k">if</span> <span class="s">'score'</span> <span class="k">in</span> m])
+<span class="f">print</span>([f <span class="k">for</span> f <span class="k">in</span> <span class="f">dir</span>(stats) <span class="k">if</span> f.<span class="f">startswith</span>(<span class="s">'ttest'</span>)])
+<span class="f">help</span>(stats.ttest_ind)          <span class="c"># 인자 · alternative 설명</span></code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="env-2" data-g="env" data-hot="0" data-k="set_option max_columns max_rows 출력 잘림 float_format">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">option</span></div>
+    <h3 data-t="출력이 잘릴 때">출력이 잘릴 때</h3>
+    <p class="when">컬럼·행이 「…」로 생략될 때.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="출력이 잘릴 때 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="출력이 잘릴 때 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code>pd.<span class="f">set_option</span>(<span class="s">'display.max_columns'</span>, <span class="k">None</span>)
+pd.<span class="f">set_option</span>(<span class="s">'display.max_rows'</span>, <span class="n">100</span>)
+pd.<span class="f">set_option</span>(<span class="s">'display.float_format'</span>, <span class="s">'{:.4f}'</span>.format)
+<span class="f">print</span>(df.<span class="f">head</span>().<span class="f">to_string</span>())</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+<article class="snip" id="env-3" data-g="env" data-hot="0" data-k="version 버전 sklearn pandas __version__">
+  <div class="meta">
+    <div class="meta-top"><span class="lib">version</span></div>
+    <h3 data-t="버전 확인">버전 확인</h3>
+    <p class="when">함수 인자가 오류 날 때 버전부터.</p>
+    <div class="acts">
+      <button type="button" class="act copy" aria-label="버전 확인 코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.6"/><path d="M3.2 10.8V3.6c0-.9.7-1.6 1.6-1.6h6"/></svg><span>복사</span></button>
+      <button type="button" class="act done" aria-pressed="false" aria-label="버전 확인 외움 표시"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.9 2.8 6.1-6.4"/></svg><span>외웠어요</span></button>
+    </div>
+  </div>
+  <div class="code">
+    <pre><code><span class="k">import</span> pandas, scipy, sklearn
+<span class="f">print</span>(pandas.__version__, sklearn.__version__, scipy.__version__)</code></pre>
+    <button type="button" class="reveal">눌러서 코드 보기</button>
+  </div>
+</article>
+  </div>
+</section>
+    <div class="empty"><b id="emptyQ">조건에 맞는 스니펫이 없다</b>다른 말로 찾거나 필터를 풀어 보세요.<br><button type="button">필터 모두 풀기</button></div>
+    <p class="foot">빅데이터분석기사 실기 파이썬 스니펫 · pandas · scikit-learn · SciPy · statsmodels — 인쇄(Ctrl+P)하면 버튼 없이 코드만 나온다.</p>
+  </main>
+</div>
+<div class="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const store = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+                  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+  const snips = $$('.snip'), sections = $$('section'), q = $('#q'), clear = $('#clear');
+  const TOTAL = snips.length;
+  const st = { g: 'all', hot: false, todo: false, memo: store.get('bd.memo', false), q: '' };
+  // 주소로 공유되는 상태: ?type=t1|t2|t3 · hot=1 · q=검색어 (외움·암기 모드는 개인 설정이라 주소에 넣지 않는다)
+  const P = new URLSearchParams(location.search);
+  if (['t1', 't2', 't3', 'env'].includes(P.get('type'))) st.g = P.get('type');
+  if (P.get('hot') === '1') st.hot = true;
+  if (P.get('q')) { st.q = P.get('q'); }
+  function syncURL() {
+    const u = new URLSearchParams();
+    if (st.g !== 'all') u.set('type', st.g);
+    if (st.hot) u.set('hot', '1');
+    if (st.q.trim()) u.set('q', st.q.trim());
+    const qs = u.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+  }
+  const done = new Set(store.get('bd.done', []));
+  snips.forEach(s => s._hay = (s.dataset.k + ' ' + s.textContent).toLowerCase());
+
+  const toast = $('.toast'); let tt;
+  const say = m => { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('on'), 1400); };
+
+  function paintDone() {
+    snips.forEach(s => { const on = done.has(s.id); s.classList.toggle('is-done', on); $('.done', s).setAttribute('aria-pressed', on); $('.done span', s).textContent = on ? '외움' : '외웠어요'; });
+    $('#doneN').textContent = done.size; $('.bar i').style.width = (done.size / TOTAL * 100) + '%';
+  }
+  function markTitle(s, t) {
+    const h = $('h3', s), raw = h.dataset.t;
+    if (!t) { h.textContent = raw; return; }
+    const i = raw.toLowerCase().indexOf(t);
+    if (i < 0) { h.textContent = raw; return; }
+    h.innerHTML = '';
+    h.append(raw.slice(0, i)); const m = document.createElement('mark'); m.textContent = raw.slice(i, i + t.length); h.append(m, raw.slice(i + t.length));
+  }
+  function apply() {
+    const t = st.q.trim().toLowerCase(); let n = 0;
+    snips.forEach(s => {
+      const ok = (st.g === 'all' || s.dataset.g === st.g) && (!st.hot || s.dataset.hot === '1') && (!st.todo || !done.has(s.id)) && (!t || s._hay.includes(t));
+      s.hidden = !ok; if (ok) n++; markTitle(s, ok ? t : '');
+    });
+    sections.forEach(sec => {
+      const c = $$('.snip', sec).filter(s => !s.hidden).length;
+      sec.hidden = c === 0;
+      const tc = $(`[data-count="${sec.id}"]`); tc.textContent = c; tc.closest('a').classList.toggle('dim', c === 0);
+    });
+    $('#shownN').textContent = n;
+    document.body.classList.toggle('filtering', !!t || st.g !== 'all' || st.hot || st.todo);
+    $('#hitN').textContent = t ? n + '개' : '';
+    $('.empty').style.display = n ? 'none' : 'block';
+    $('#emptyQ').textContent = t ? `「${st.q.trim()}」에 맞는 스니펫이 없다` : '조건에 맞는 스니펫이 없다';
+    clear.style.display = st.q ? 'inline-block' : 'none';
+    $('.search kbd').style.display = st.q ? 'none' : '';
+    syncURL();
+  }
+
+  q.addEventListener('input', () => { st.q = q.value; apply(); });
+  clear.addEventListener('click', () => { q.value = st.q = ''; apply(); q.focus(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); q.select(); }
+    else if (e.key === 'Escape') { if (document.body.classList.contains('nav-open')) closeNav(); else if (st.q) { q.value = st.q = ''; apply(); } else q.blur(); }
+  });
+  $$('.seg button').forEach(b => b.addEventListener('click', () => {
+    st.g = b.dataset.g; $$('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); apply();
+    window.scrollTo({ top: 0 });
+  }));
+  const toggles = { hot: $('#tHot'), todo: $('#tTodo'), memo: $('#tMemo') };
+  Object.entries(toggles).forEach(([k, b]) => {
+    b.setAttribute('aria-pressed', st[k]);
+    b.addEventListener('click', () => {
+      st[k] = !st[k]; b.setAttribute('aria-pressed', st[k]);
+      if (k === 'memo') { document.body.classList.toggle('memo', st.memo); snips.forEach(s => s.classList.remove('shown')); store.set('bd.memo', st.memo); }
+      else apply();
+    });
+  });
+  document.body.classList.toggle('memo', st.memo);
+  $('.empty button').addEventListener('click', () => {
+    q.value = st.q = ''; st.g = 'all'; st.hot = st.todo = false;
+    $$('.seg button').forEach(x => x.setAttribute('aria-pressed', x.dataset.g === 'all'));
+    toggles.hot.setAttribute('aria-pressed', false); toggles.todo.setAttribute('aria-pressed', false); apply();
+  });
+
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.append(ta); ta.select();
+            let ok = false; try { ok = document.execCommand('copy'); } catch {} ta.remove(); return ok; }
+  }
+  snips.forEach(s => {
+    const cp = $('.copy', s);
+    cp.addEventListener('click', async () => {
+      const ok = await copyText($('pre', s).textContent);
+      if (!ok) { say('복사하지 못했다 — 코드를 직접 선택해 주세요'); return; }
+      cp.classList.add('copied'); $('span', cp).textContent = '복사됨'; say('코드를 복사했다');
+      setTimeout(() => { cp.classList.remove('copied'); $('span', cp).textContent = '복사'; }, 1400);
+    });
+    $('.done', s).addEventListener('click', () => {
+      done.has(s.id) ? done.delete(s.id) : done.add(s.id); store.set('bd.done', [...done]); paintDone(); if (st.todo) apply();
+    });
+    $('.reveal', s).addEventListener('click', () => s.classList.add('shown'));
+  });
+
+  const links = $$('.toc a');
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.dataset.sec === e.target.id));
+  }), { rootMargin: '-25% 0px -65% 0px' });
+  sections.forEach(s => io.observe(s));
+
+  const closeNav = () => { document.body.classList.remove('nav-open'); $('#menu').setAttribute('aria-expanded', false); };
+  $('#menu').addEventListener('click', () => { const o = document.body.classList.toggle('nav-open'); $('#menu').setAttribute('aria-expanded', o); });
+  $('.scrim').addEventListener('click', closeNav);
+  links.forEach(a => a.addEventListener('click', closeNav));
+  $('#resetDone').addEventListener('click', () => { if (!done.size) return; done.clear(); store.set('bd.done', []); paintDone(); apply(); say('외움 표시를 모두 지웠다'); });
+
+  q.value = st.q;
+  $$('.seg button').forEach(x => x.setAttribute('aria-pressed', x.dataset.g === st.g));
+  $('#share').addEventListener('click', async () => say(await copyText(location.href) ? '지금 화면 그대로의 주소를 복사했다' : '주소를 복사하지 못했다'));
+  paintDone(); apply();
+})();
+</script>
+</body>
+</html>
