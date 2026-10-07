@@ -611,7 +611,6 @@ print(round(logit.llf, 4), round(logit.aic, 4))   # 로그우도 · AIC'''),
 '''from sklearn.linear_model import LogisticRegression
 
 lr = LogisticRegression(penalty=None, max_iter=1000)   # 규제 없이
-# (sklearn 1.2 미만이면 penalty='none' 문자열)
 lr.fit(df[['x', 'x2']], df['label'])
 print(lr.intercept_, lr.coef_)   # statsmodels Logit 과 같은 값
 # 기본값(penalty='l2') 그대로면 계수가 달라진다'''),

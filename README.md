@@ -83,6 +83,5 @@ GitHub Pages로 그대로 올라갑니다. Settings → Pages → Branch: `main`
 
 ## 알아 둘 점
 
-- 시험장의 scikit-learn 버전은 확인하지 못했습니다. 1.2 미만이면 `penalty=None` 대신
-  `penalty='none'` 문자열을 써야 해서 해당 카드 주석에 적어 두었습니다.
+- 시험장 scikit-learn 은 1.2 이상이라 `LogisticRegression(penalty=None)` 을 그대로 씁니다.
 - 스니펫은 교재 원본 데이터가 아니라, 같은 컬럼 구조의 가짜 데이터로 실행 검증합니다.

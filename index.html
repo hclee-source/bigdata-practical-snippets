@@ -1795,7 +1795,6 @@ err = (pred != df[<span class="s">'label'</span>]).<span class="f">mean</span>()
     <pre><code><span class="k">from</span> sklearn.linear_model <span class="k">import</span> LogisticRegression
 
 lr = <span class="f">LogisticRegression</span>(penalty=<span class="k">None</span>, max_iter=<span class="n">1000</span>)   <span class="c"># 규제 없이</span>
-<span class="c"># (sklearn 1.2 미만이면 penalty='none' 문자열)</span>
 lr.<span class="f">fit</span>(df[[<span class="s">'x'</span>, <span class="s">'x2'</span>]], df[<span class="s">'label'</span>])
 <span class="f">print</span>(lr.intercept_, lr.coef_)   <span class="c"># statsmodels Logit 과 같은 값</span>
 <span class="c"># 기본값(penalty='l2') 그대로면 계수가 달라진다</span></code></pre>
